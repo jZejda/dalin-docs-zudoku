@@ -1,0 +1,122 @@
+# Tržiště
+
+**Tržiště** je místo, kde si členové klubu mohou mezi sebou nabízet a objednávat věci — třeba prodej použitého vybavení,
+oblečení s klubovým potiskem nebo cokoliv jiného, na čem se v oddíle domluvíte. Kdo něco nabízí, založí časově omezenou
+**nabídku** s jedním nebo víc **produkty**. Ostatní si z nabídky objednají, co potřebují, a po uzavření nabídky se náklady
+rozúčtují.
+
+:::tip{title="Modul může být vypnutý"}
+Tržiště je volitelný modul aplikace. Pokud položku **Tržiště** v menu nevidíš, není ve tvém klubu zapnutý — stačí požádat
+správce klubu, ať ho zapne v nastavení.
+:::
+
+Sekce **Tržiště** se v menu skládá ze tří stránek:
+
+- **Tržiště** — přehled nabídek ostatních členů, tady si můžeš něco objednat
+- **Moje nabídky** — správa věcí, které nabízíš ty sám
+- **Moje objednávky** — přehled toho, co sis objednal
+
+## Tržiště — co si můžu objednat
+
+Stránka **Tržiště** zobrazuje produkty seskupené podle jednotlivých nabídek. Nahoře jsou dva taby:
+
+- **Aktivní nabídky** — nabídky, které jsou stále otevřené pro objednávky
+- **Proběhlé nabídky** — nabídky, které už byly uzavřeny nebo rozúčtovány
+
+U každé nabídky vidíš jméno autora, termín, do kdy je možné objednávat, popřípadě štítek **Oddílová**, pokud jde o nabídku
+za celý oddíl.
+
+U jednotlivých produktů v nabídce je vidět:
+
+- **obrázek a název** produktu (s popisem a odkazem na produkt, pokud ho autor vyplnil)
+- **cena za kus** — pokud je nastavena na 0 Kč, zobrazí se místo ceny **„Zdarma / výměna“**
+- **způsob úhrady** — **Přímá platba** (proběhne mimo systém, například hotově nebo převodem) nebo **Stržení z konta**
+  (částka se strhne z tvého osobního konta při rozúčtování)
+- **zbývající počet kusů** — konkrétní číslo, **„Neomezeno“** (bez limitu) nebo **„Vyprodáno“**
+
+### Jak si objednat
+
+1. U produktu, který tě zajímá, klikni na tlačítko **Objednat**.
+2. Zadej **počet kusů** — nejvýše tolik, kolik jich ještě zbývá.
+3. Systém ti průběžně počítá **celkovou částku** k objednávce.
+4. Volitelně napiš **poznámku** (třeba velikost trička).
+5. Objednávku potvrď.
+
+:::warning{title="Vlastní nabídku si neobjednáš"}
+U produktů z tvé vlastní nabídky se tlačítko **Objednat** nezobrazuje.
+:::
+
+## Moje nabídky — vystavení vlastní nabídky
+
+Na stránce **Moje nabídky** vidíš přehled toho, co nabízíš, a odtud také zakládáš nabídky nové.
+
+### Jak vystavit nabídku
+
+1. Klikni na tlačítko **Vystavit nabídku** — otevře se boční panel s formulářem.
+2. Vyplň **název** a **popis** nabídky.
+3. Nastav **termín objednávek** — datum a čas, do kdy mohou ostatní členové objednávat.
+4. Přidej jeden nebo víc **produktů**. U každého vyplníš:
+   - název, popis a volitelně obrázek a odkaz
+   - **cenu za kus** (0 Kč = „Zdarma / výměna“)
+   - **způsob úhrady** — Přímá platba, nebo Stržení z konta
+   - **počet kusů** — necháš prázdné, pokud je množství neomezené
+5. Potvrď tlačítkem pro uložení.
+
+:::tip{title="Oddílová nabídka"}
+Toggle **Oddílová nabídka** vidí a může zapnout jen **Správce klubu** nebo **Správce závodů**. Oddílová nabídka je nabídka
+za celý oddíl (ne za jednotlivého člena) — rozúčtování takové nabídky pak provádí finančník, ne autor.
+:::
+
+:::warning{title="Po první objednávce se produkt uzamkne"}
+Jakmile si někdo z produktu objedná alespoň jeden kus, nejde už u něj měnit **cena** ani **způsob úhrady** a produkt
+nejde **smazat**. Ostatní údaje (název, popis, obrázek) upravovat můžeš dál a do nabídky můžeš i nadále přidávat další
+produkty.
+:::
+
+### Akce u nabídky
+
+U každé vlastní nabídky (případně u cizí oddílové nabídky, viz níže) máš k dispozici tyto akce:
+
+- **Objednávky** — přehled, kdo si co a kolik objednal
+- **Upravit** — úprava nabídky, dokud nebyla rozúčtována
+- **Poslat e-mail členům** — ruční upozornění na tuto nabídku všem aktivním členům klubu (hodí se třeba když nabídku
+  doplníš nebo si myslíš, že si jí lidé nevšimli)
+- **Uzavřít nabídku** — ukončí příjem nových objednávek i rušení stávajících; všem zúčastněným se rozešle e-mail
+- **Rozúčtovat** — dostupné až po uzavření nabídky
+
+:::danger{title="Nevratné akce"}
+**Uzavření** i **rozúčtování** nabídky jsou nevratné kroky. Před potvrzením zkontroluj, že je vše v pořádku.
+:::
+
+#### Rozúčtování
+
+Rozúčtování je dostupné pouze u **uzavřené** nabídky:
+
+- **osobní nabídku** rozúčtuje její **autor**
+- **oddílovou nabídku** rozúčtuje **finančník** (nebo Super Admin) — finančník proto na stránce Moje nabídky vidí i
+  oddílové nabídky založené jinými členy, aby je mohl rozúčtovat
+
+Při rozúčtování se u objednávek se způsobem úhrady **Stržení z konta** strhne odpovídající částka z osobního konta
+objednatele (v přehledu financí se objeví jako pohyb typu **„Nákup na tržišti“**). Objednávky s **Přímou platbou** se
+pouze označí jako vyřízené — peníze si mezi sebou účastníci vyrovnávají mimo systém.
+
+## Moje objednávky
+
+Na stránce **Moje objednávky** vidíš přehled všeho, co sis přes tržiště objednal — s cenou platnou v okamžiku
+objednávky, celkovou částkou a stavem:
+
+- **Objednáno** — objednávka čeká na uzavření a rozúčtování nabídky
+- **Zrušeno** — objednávku jsi zrušil (nebo byla zrušena)
+- **Rozúčtováno** — nabídka byla rozúčtována, u placených objednávek už proběhla úhrada
+
+Objednávku můžeš **zrušit**, dokud je příslušná nabídka aktivní — zrušením se objednané kusy uvolní zpět ostatním.
+
+## Automatické uzavření prošlých nabídek
+
+Pokud autor nabídku sám neuzavře, systém ji **automaticky uzavře** krátce po uplynutí termínu objednávek (do 15 minut).
+I v tomto případě dostanou zúčastnění e-mail o uzavření, stejně jako při ručním uzavření.
+
+:::tip{title="Kdo dostane e-mail o uzavření"}
+E-mail o uzavření nabídky dostane **autor nabídky** i všichni, kdo si z ní **něco objednali** — s výjimkou těch, kdo
+svou objednávku předtím zrušili.
+:::

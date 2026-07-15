@@ -1,0 +1,139 @@
+# Vývojové prostředí
+
+Lokální vývoj DaLinu běží v **Dockeru** přes [Laravel Sail](https://laravel.com/docs/sail).
+Na hostiteli nepotřebujete instalovat PHP, MySQL ani Node.js — vše běží v kontejnerech.
+Denní příkazy jsou sjednocené v **Makefile** (`make` vypíše nápovědu).
+
+Než se pustíte do spolupráce přes Git, je vhodné projekt nejprve rozjet lokálně a osahat si ho.
+Pěkný úvod do prvního příspěvku na GitHubu (GitLab funguje obdobně) najdete
+[tady](https://github.com/firstcontributions/first-contributions/blob/master/translations/README.cs.md).
+
+## Požadavky
+
+- **Docker** (Docker Desktop nebo Docker Engine + Compose)
+- **Git**
+- Volitelně **PHP** a **Composer** na hostiteli — jen pro první `composer install`,
+  aby vznikl `./vendor/bin/sail` (bez něj nejde spustit `make up`)
+
+:::tip{title="Bez PHP na hostiteli"}
+Pokud Composer lokálně nemáte, první instalaci závislostí můžete udělat přes Docker:
+
+```bash
+docker run --rm \
+  -u "$(id -u):$(id -g)" \
+  -v "$(pwd):/var/www/html" \
+  -w /var/www/html \
+  laravelsail/php85-composer:latest \
+  composer install --ignore-platform-reqs
+```
+:::
+
+## První spuštění
+
+1. Naklonujte repozitář a připravte konfiguraci:
+
+    ```bash
+    git clone git@gitlab.com:jzejda/dalin.git
+    # nebo
+    git clone https://gitlab.com/jzejda/dalin.git
+
+    cd dalin
+    cp .env.example .env
+    ```
+
+2. Nainstalujte PHP závislosti (na hostiteli nebo přes Docker výše):
+
+    ```bash
+    composer install
+    ```
+
+3. Spusťte kontejnery:
+
+    ```bash
+    make up
+    ```
+
+4. Vstupte do PHP kontejneru a dokončete inicializaci:
+
+    ```bash
+    make bash
+    ```
+
+    Uvnitř kontejneru:
+
+    ```bash
+    php artisan key:generate
+    ```
+
+    V souboru `.env` nastavte připojení k databázi. Uvnitř Sail sítě musí být:
+
+    ```ini
+    DB_HOST=mysql
+    DB_PORT=3306
+    DB_DATABASE=dalinlast
+    DB_USERNAME=root
+    DB_PASSWORD=
+    ```
+
+    (Hodnoty `DB_DATABASE` / `DB_USERNAME` / `DB_PASSWORD` musí odpovídat tomu, co máte v `.env`
+    — stejné hodnoty používá MySQL kontejner při startu.)
+
+    ```bash
+    php artisan migrate --seed
+    php artisan shield:install
+    # potvrďte yes a yes
+
+    npm install
+    npm run dev
+    ```
+
+    Vite můžete spustit i z hostitele: `make npm-dev`.
+
+5. Otevřete aplikaci v prohlížeči:
+
+    - aplikace: [http://localhost](http://localhost)
+    - administrace: [http://localhost/admin/login](http://localhost/admin/login)
+
+    Přihlašovací údaje admina najdete v `database/seeders/UserTableSeeder.php`
+    (výchozí e-mail `admin@example.com`, heslo podle `ADMIN_USER_PASSWORD` v `.env`, jinak `secret`).
+
+## Služby v Dockeru
+
+Vedle aplikace běží pomocné služby definované v `docker-compose.yml`:
+
+| Služba | URL / port | Účel |
+|---|---|---|
+| Aplikace (Sail) | [http://localhost](http://localhost) | Laravel + Filament |
+| Vite | port `5173` | Hot reload CSS/JS |
+| phpMyAdmin | [http://localhost:8084](http://localhost:8084) | Správa MySQL |
+| Mailpit | [http://localhost:8025](http://localhost:8025) | Náhled odchozích e-mailů |
+| MySQL | port `3306` | Databáze (forward na hostitele) |
+
+Stack v kontejnerech: **PHP 8.5**, **Laravel 13**, **Filament 5**, **MySQL 8**.
+
+## Denní vývoj
+
+Příkazy spouštějte z kořene projektu:
+
+```bash
+make up          # start kontejnerů
+make down        # stop kontejnerů
+make bash        # shell v PHP kontejneru
+make art c='…'   # artisan, např. make art c='migrate'
+make pest        # Pest testy (nejprve migrace testovací DB)
+make lint        # kontrola stylu (Pint)
+make lint-fix   # automatická oprava stylu
+make phpstan     # statická analýza
+make clear       # vyčištění cache
+make npm-dev     # Vite dev server v Sail
+```
+
+Testovací databázi zvlášť připravíte příkazem:
+
+```bash
+make migrate-test-database
+```
+
+:::tip{title="Makefile"}
+Kompletní seznam cílů získáte zadáním `make` bez parametrů.
+:::

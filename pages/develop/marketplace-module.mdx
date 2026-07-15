@@ -1,0 +1,127 @@
+# Modul Tržiště (DEV-22)
+
+Tržiště je volitelný modul umožňující členům klubu vystavovat časově omezené nabídky produktů (za sebe nebo za oddíl),
+ostatním členům je objednávat a po uzavření nabídky náklady rozúčtovat. Modul je řízen konfiguračním přepínačem, stejně
+jako moduly **Doprava** a **Doplňkové služby**.
+
+## Zapnutí modulu
+
+Modul se zapíná/vypíná na stránce **Nastavení** (`app/Filament/Clusters/Config/Pages/Settings.php`,
+`/admin/config/settings`) přepínačem **„Modul Tržiště je zapnutý“**. Stav se ukládá pod klíčem `AppSetting`:
+
+```php
+AppSetting::MARKETPLACE_MODULE_ENABLED; // 'marketplace.enabled'
+AppSetting::isMarketplaceModuleEnabled(): bool
+```
+
+Všechny stránky modulu i příkaz pro automatické uzavírání kontrolují tento příznak — vypnutí modulu skryje tržiště
+v celé aplikaci, uložená data zůstávají zachována.
+
+## Datový model
+
+| Model | Účel | Klíčové vztahy a metody |
+|---|---|---|
+| `MarketOffer` | Nabídka vystavená členem (osobní nebo oddílová) | `user()` (autor), `products()` (`hasMany`), `orders()` (`hasManyThrough` přes `MarketProduct`), `isOpenForOrders()` = `status === Active && closes_at->isFuture()` |
+| `MarketProduct` | Jedna položka v nabídce, snapshot ceny se řeší přes objednávky | `marketOffer()`, `orders()`, `qtyOrdered()`, `qtyRemaining()` (`null` = neomezeno), `isSoldOut()`, `isFree()` (`unit_price === 0.0`); implementuje `HasMedia` (Spatie MediaLibrary), kolekce `MarketProduct::MEDIA_COLLECTION_IMAGE` = `market_product_image`, `singleFile()` |
+| `MarketOrder` | Objednávka konkrétního uživatele na produkt | `marketProduct()`, `user()`, `userCredit()` (`hasOne` přes `market_order_id`), `totalAmount()` = `qty * unit_price`; `unit_price` je **snapshot** ceny produktu v okamžiku objednání |
+
+## Enumy
+
+- `App\Enums\MarketOfferStatus`: `Active` → `Closed` → `Billed` (implementuje `HasColor`, `HasIcon`, `HasLabel`)
+- `App\Enums\MarketOrderStatus`: `Ordered`, `Cancelled`, `Billed`
+- `App\Enums\MarketPaymentMethod`: `DirectPayment` (`directPayment`), `CreditCharge` (`creditCharge`)
+- `App\Enums\UserCreditType::MarketplaceBilling` (`marketplaceBilling`) — nový typ pohybu na kontě člena, používá se
+  výhradně při rozúčtování tržiště
+
+Popisky, ikony a barvy jsou definovány přímo v enumech a čtou se z `lang/cs/marketplace.php`.
+
+## MarketplaceService
+
+`app/Services/MarketplaceService.php` obsahuje veškerou byznys logiku:
+
+- **`order(MarketProduct $product, User $user, int $qty, ?string $note): MarketOrder`**
+  Běží v `DB::transaction()` s `lockForUpdate()` na produktu, aby dva uživatelé nemohli přeprodat poslední kus. Ověřuje,
+  že nabídka je otevřená (`isOpenForOrders()`) a že je dostatek volných kusů. Cena se ukládá jako snapshot
+  (`unit_price` z produktu v okamžiku objednávky).
+- **`cancelOrder(MarketOrder $order): void`**
+  Zrušit lze jen objednávku ve stavu `Ordered`, a jen dokud je nabídka otevřená pro objednávky.
+- **`closeOffer(MarketOffer $offer): void`**
+  Přepne nabídku do stavu `Closed`, nastaví `closed_at`, a rozešle `Mail\MarketOfferClosed` všem zúčastněným (autor +
+  všichni, jejichž objednávka není `Cancelled`).
+- **`billOffer(MarketOffer $offer, User $billedBy): int`**
+  Dostupné jen pro `Closed` nabídku. V transakci projde všechny objednávky se stavem `Ordered`: u produktů se způsobem
+  úhrady `CreditCharge` a nenulovou částkou (`totalAmount() > 0.0`) vytvoří záporný `UserCredit`
+  (`credit_type = MarketplaceBilling`, `market_order_id` navázán na objednávku) a interní `UserCreditNote`
+  (`internal = true`, s `params` obsahujícími `market_offer_id`, `market_order_id`, `qty`, `unit_price`). Objednávky
+  s `DirectPayment` se pouze přepnou do stavu `Billed` bez pohybu na kontě. Nakonec přepne nabídku do stavu `Billed`.
+- **`announceOffer(MarketOffer $offer): int`**
+  Rozešle `Mail\MarketOfferAnnouncement` všem aktivním uživatelům s vyplněným e-mailem kromě autora nabídky. Vrací
+  počet adresátů.
+
+## Filament stránky
+
+| Stránka | Třída | Přístup |
+|---|---|---|
+| Tržiště | `App\Filament\Pages\MarketplaceList` | přehled produktů seskupených podle nabídky (`Group::make('market_offer_id')`), taby Aktivní/Proběhlé řízené vlastností `activeTab`, akce `order` s modalem (počet kusů, `Placeholder` s živým součtem přes `Get`, poznámka) |
+| Moje nabídky | `App\Filament\Pages\MyMarketOfferList` | `CreateAction`/`EditAction` se `slideOver()` a `Repeater` produktů; cena a způsob úhrady se disablují, pokud `$product->orders()->exists()`; položky repeateru nejdou smazat za stejné podmínky |
+| Moje objednávky | `App\Filament\Pages\MyMarketOrderList` | přehled objednávek přihlášeného uživatele se snapshot cenou, filtrem podle stavu a akcí zrušení |
+
+Všechny tři stránky mají `getNavigationGroup()` vracející `__('marketplace.navigation_group')` (**„Tržiště“**) a
+`canAccess()` vyžadující přihlášeného uživatele a `AppSetting::isMarketplaceModuleEnabled()`.
+
+### Autorizační pravidla v `MyMarketOfferList`
+
+```php
+// Kdo smí založit oddílovou nabídku
+private function canCreateClubOffer(): bool
+{
+    return Auth::user()?->hasRole([
+        AppRoles::SuperAdmin,
+        AppRoles::ClubAdmin,
+        AppRoles::EventMaster,
+    ]) ?? false;
+}
+
+// Kdo smí rozúčtovat nabídku (oddílovou vs. osobní)
+private function canBillOffer(MarketOffer $offer): bool
+{
+    if ($offer->is_club_offer) {
+        return $this->canBillClubOffers(); // SuperAdmin, BillingSpecialist
+    }
+
+    return $offer->user_id === Auth::id();
+}
+```
+
+Dotaz na `MyMarketOfferList` navíc přidává `orWhere('is_club_offer', '=', true)`, pokud přihlášený uživatel smí
+rozúčtovávat oddílové nabídky — finančník tak v přehledu vidí i cizí oddílové nabídky.
+
+## Automatické uzavírání expirovaných nabídek
+
+`app/Console/Commands/CloseExpiredMarketOffersCommand.php` (signatura `marketplace:close-expired`) načte všechny
+`Active` nabídky s `closes_at <= now()` a pro každou zavolá `MarketplaceService::closeOffer()` (včetně rozeslání
+e-mailů). Pokud je modul vypnutý, příkaz se ukončí bez akce. Naplánováno v `bootstrap/app.php`:
+
+```php
+$schedule->command('marketplace:close-expired')->everyFifteenMinutes();
+```
+
+## E-maily
+
+- `App\Mail\MarketOfferAnnouncement` — ruční upozornění na novou/aktualizovanou nabídku (`announceOffer()`)
+- `App\Mail\MarketOfferClosed` — upozornění na uzavření nabídky, ať už ruční (`closeOffer()`) nebo automatické
+  (`marketplace:close-expired`)
+
+Šablony jsou v `resources/views/emails/marketplace/`.
+
+## Ostatní soubory
+
+- Migrace: `create_market_offers_table`, `create_market_products_table`, `create_market_orders_table`,
+  `add_market_order_id_to_user_credits_table` (vazba `UserCredit.market_order_id` na `MarketOrder`)
+- Factories: `MarketOfferFactory`, `MarketProductFactory`, `MarketOrderFactory`
+- Překlady: `lang/cs/marketplace.php`
+- Testy: `tests/Feature/MarketplaceTest.php`, `tests/Feature/Filamentphp/SettingsPageTest.php`
+
+:::tip{title="Uživatelská dokumentace"}
+Popis chování z pohledu člena klubu je v [nápovědě — Tržiště](/napoveda/trziste).
+:::

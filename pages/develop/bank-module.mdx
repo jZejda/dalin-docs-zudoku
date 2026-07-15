@@ -1,0 +1,129 @@
+# Modul Napojení na banku
+
+Napojení na banku je volitelný modul, který stahuje bankovní transakce přes konektory jednotlivých bank a ukládá
+je do tabulky `bank_transactions`. Modul je řízen konfiguračním přepínačem, stejně jako moduly **Tržiště**,
+**Doprava** a **Doplňkové služby**.
+
+## Zapnutí modulu
+
+Modul se zapíná/vypíná na stránce **Nastavení** (`app/Filament/Clusters/Config/Pages/Settings.php`,
+`/admin/config/settings`) přepínačem **„Modul napojení na banku je zapnutý“**. Stav se ukládá pod klíčem
+`AppSetting`:
+
+```php
+AppSetting::BANK_MODULE_ENABLED; // 'bank.enabled'
+AppSetting::isBankModuleEnabled(): bool
+```
+
+`BankAccountResource::canAccess()` i cron job pro synchronizaci transakcí (`UpdateBankTransaction`) kontrolují
+tento příznak — vypnutí modulu skryje bankovní stránky v celé aplikaci a zastaví stahování transakcí, uložená
+data zůstávají zachována.
+
+## Enum `BankConnector`
+
+`app/Enums/BankConnector.php` nahrazuje dřívější řetězcové konstanty (`BankAccount::MONETA_MONEY_BANK`,
+`BankAccount::FIO_BANK`) enumem, který zapouzdřuje jak popisek, tak konkrétní konektor a jeho pole s přístupovými
+údaji:
+
+```php
+enum BankConnector: string
+{
+    case MonetaMoneyBank = 'monetaMoneyBank';
+    case FioBank = 'fioBank';
+
+    public function label(): string; // "Moneta Money Bank" / "Fio banka"
+
+    /** @return class-string<ConnectorInterface> */
+    public function connectorClass(): string;
+
+    public function connector(): ConnectorInterface; // app($this->connectorClass())
+
+    /** @return array<string, string> key => human label, pro dynamický formulář */
+    public function credentialFields(): array;
+}
+```
+
+`BankAccount::$code` je nově castován na `BankConnector` (dřív `string`). Řádky s neplatným/legacy kódem banky
+vyhazují při přístupu k `code` `ValueError` — `UpdateBankTransaction` tento případ odchytává a řádek přeskočí
+(loguje varování s `getRawOriginal('code')`), místo aby spadl celý cron job.
+
+## Šifrované přístupové údaje
+
+`BankAccount::$account_credentials` používá cast `encrypted:array` (dřív `array`). Migrace
+`2026_07_15_000000_encrypt_bank_account_credentials.php`:
+
+- rozšíří sloupec `account_credentials` z `json` na `text` (šifrovaný řetězec nemusí být validní JSON),
+- projde existující řádky a zašifruje je pomocí `Crypt::encryptString()` — řádky, které už zašifrované jsou
+  (detekce zkusmým `Crypt::decryptString()` v `try/catch`), přeskočí, aby migrace byla idempotentní,
+- `down()` provede opačný postup (dešifrování + vrácení sloupce na `json`).
+
+Čtení/zápis přes model je transparentní — volající pracuje s obyčejným polem (`$account->account_credentials`),
+Eloquent cast šifrování a dešifrování řeší na pozadí pomocí `APP_KEY`.
+
+:::warning{title="Souběžná migrace v bezpečnostní větvi"}
+Stejná změna (`encrypted:array` cast) vznikla nezávisle i v opravě bezpečnostního auditu na větvi
+`security/audit-fixes-v13x` (migrace `2026_07_07_120000_encrypt_bank_account_credentials.php`, commit `b96b5471`).
+Při mergování obou větví do `v13.x` je potřeba obě migrace sjednotit, aby se sloupec nesnažil zašifrovat dvakrát.
+:::
+
+## Filament formulář — dynamická přístupová pole
+
+`BankAccountResource` generuje formulářová pole pro přístupové údaje dynamicky podle zvoleného konektoru
+(`Get $get('code')` → `BankConnector::credentialFields()`):
+
+```php
+Section::make('Přístupové údaje')
+    ->visible(fn (Get $get): bool => filled($get('code')))
+    ->schema(fn (Get $get, ?BankAccount $record, string $operation): array =>
+        self::credentialInputs($get('code'), $record, $operation))
+```
+
+Klíčové vlastnosti:
+
+- Konektor (`code`) nelze po založení napojení měnit (`disabledOn('edit')`) — pro změnu banky je nutné napojení
+  smazat a založit nové.
+- Pole přístupových údajů jsou typu `password()->revealable()`, `dehydrated()` pouze pokud je vyplněné (prázdné
+  pole při editaci nepřepíše uloženou hodnotu).
+- Zástupný text (`placeholder`) ukazuje jen poslední 4 znaky uložené hodnoty (`••••1234`) přes
+  `maskedCredential()` — nikdy nevrací celou hodnotu.
+- `CreateBankAccount::mutateFormDataBeforeCreate()` přesune `credentials.*` do `account_credentials`.
+- `EditBankAccount::mutateFormDataBeforeSave()` sloučí nově vyplněné položky (`array_filter` na neprázdné) se
+  stávajícími uloženými přes `array_merge($record->account_credentials ?? [], $incoming)` — tak zůstanou
+  nevyplněná pole beze změny.
+
+Konektory samotné (`MonetaBank`, `FioBank` v `app/Services/Bank/Connector/`) navíc před voláním API ověřují, že
+požadované přístupové údaje (`token`, u Moneta i `account_id`) skutečně existují — pokud chybí, zalogují chybu a
+vrátí `null` místo pádu na chybějícím indexu pole.
+
+## Cron synchronizace
+
+`app/Http/Controllers/Cron/Jobs/UpdateBankTransaction.php`:
+
+1. Pokud je modul vypnutý (`AppSetting::isBankModuleEnabled()` je `false`), zaloguje info a skončí.
+2. Načte aktivní bankovní účty (`BankAccount::query()->where('active', '=', 1)->get()`).
+3. Pro každý účet získá konektor přes `$bankAccount->code->connector()` — při `ValueError` (neplatný/legacy kód
+   banky) účet přeskočí a zaloguje varování.
+4. Zavolá `$connector->getTransactions($bankAccount, $bankAccount->last_synced?->subMinutes(5))` a uloží nové
+   transakce.
+
+## Autorizace
+
+`BankAccountPolicy` deleguje na Filament Shield permission (`ViewAny:BankAccount`, `View:BankAccount`,
+`Create:BankAccount`, `Update:BankAccount`, `Delete:BankAccount`) — role musí mít odpovídající oprávnění přiřazené
+přes Shield.
+
+## Testy
+
+`tests/Feature/BankModuleTest.php` pokrývá:
+
+- toggle modulu na stránce Nastavení a jeho vliv na dostupnost stránek (`assertForbidden`/`assertOk`),
+- šifrování přístupových údajů „at rest“ (`getRawOriginal()` neobsahuje plaintext, `Crypt::decryptString()` ano),
+- přeskočení synchronizace při vypnutém modulu a u neaktivních účtů,
+- přeskočení účtu s neznámým/legacy kódem banky bez pádu cronu,
+- write-only chování formuláře (vytvoření, needer se stávající hodnota při editaci, přepsání hodnoty při zadání
+  nové).
+
+:::tip{title="Uživatelská/instalační dokumentace"}
+Popis nastavení a konektorů z pohledu administrátora je v [instalační dokumentaci — Napojení na
+banku](/install/bank-connector).
+:::

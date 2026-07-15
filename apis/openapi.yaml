@@ -1,0 +1,2179 @@
+openapi: 3.0.3
+info:
+  title: 'DaLin API Documentation'
+  description: 'Start (and never finish) side projects with this API.'
+  version: 1.0.0
+servers:
+  - url: 'https://demo.dalin.cz'
+tags:
+  - name: V1
+    description: 'APIs V1'
+paths:
+  /api/v1/user/race-profiles:
+    get:
+      summary: 'Seznam závodních profilů'
+      operationId: seznamZvodnchProfil
+      description: 'Vrátí závodní profily přihlášeného uživatele (výchozí jen aktivní).'
+      parameters:
+        -
+          in: query
+          name: all
+          description: 'When true, includes both active and inactive race profiles. Defaults to false (active only).'
+          example: false
+          required: false
+          schema:
+            type: boolean
+            description: 'When true, includes both active and inactive race profiles. Defaults to false (active only).'
+            example: false
+      responses:
+        200:
+          description: 'Example User Race Profiles'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 101
+                      reg_number: A12-0001
+                      first_name: Jan
+                      last_name: Novak
+                      full_name: 'A12-0001 - Jan Novak'
+                      email: jan.novak@example.com
+                      phone: '+420777111222'
+                      gender: M
+                      active: true
+                      active_until: '2026-12-31'
+                      created_at: '2025-01-15T10:22:00.000000Z'
+                      updated_at: '2026-02-01T08:10:44.000000Z'
+                    -
+                      id: 102
+                      reg_number: A12-0002
+                      first_name: Petra
+                      last_name: Novakova
+                      full_name: 'A12-0002 - Petra Novakova'
+                      email: null
+                      phone: null
+                      gender: F
+                      active: false
+                      active_until: '2024-12-31'
+                      created_at: '2024-03-10T09:00:00.000000Z'
+                      updated_at: '2025-01-03T11:18:19.000000Z'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id: 101
+                        reg_number: A12-0001
+                        first_name: Jan
+                        last_name: Novak
+                        full_name: 'A12-0001 - Jan Novak'
+                        email: jan.novak@example.com
+                        phone: '+420777111222'
+                        gender: M
+                        active: true
+                        active_until: '2026-12-31'
+                        created_at: '2025-01-15T10:22:00.000000Z'
+                        updated_at: '2026-02-01T08:10:44.000000Z'
+                      - id: 102
+                        reg_number: A12-0002
+                        first_name: Petra
+                        last_name: Novakova
+                        full_name: 'A12-0002 - Petra Novakova'
+                        email: null
+                        phone: null
+                        gender: F
+                        active: false
+                        active_until: '2024-12-31'
+                        created_at: '2024-03-10T09:00:00.000000Z'
+                        updated_at: '2025-01-03T11:18:19.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 101
+                        reg_number:
+                          type: string
+                          example: A12-0001
+                        first_name:
+                          type: string
+                          example: Jan
+                        last_name:
+                          type: string
+                          example: Novak
+                        full_name:
+                          type: string
+                          example: 'A12-0001 - Jan Novak'
+                        email:
+                          type: string
+                          example: jan.novak@example.com
+                        phone:
+                          type: string
+                          example: '+420777111222'
+                        gender:
+                          type: string
+                          example: M
+                        active:
+                          type: boolean
+                          example: true
+                        active_until:
+                          type: string
+                          example: '2026-12-31'
+                        created_at:
+                          type: string
+                          example: '2025-01-15T10:22:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2026-02-01T08:10:44.000000Z'
+      tags:
+        - V1
+      security: []
+  /api/v1/user/entry:
+    get:
+      summary: 'Seznam přihlášek uživatele'
+      operationId: seznamPihlekUivatele
+      description: 'Vrátí přihlášky všech závodních profilů uživatele, výchozí od dneška dál.'
+      parameters:
+        -
+          in: query
+          name: from
+          description: 'Date from in Y-m-d format. Filters by sport event date.'
+          example: '2026-01-01'
+          required: false
+          schema:
+            type: string
+            description: 'Date from in Y-m-d format. Filters by sport event date.'
+            example: '2026-01-01'
+        -
+          in: query
+          name: to
+          description: 'Date to in Y-m-d format. Filters by sport event date.'
+          example: '2026-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date to in Y-m-d format. Filters by sport event date.'
+            example: '2026-12-31'
+        -
+          in: query
+          name: page
+          description: 'Page number for pagination.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Page number for pagination.'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: 'Number of items per page. Defaults to 20.'
+          example: 20
+          required: false
+          schema:
+            type: integer
+            description: 'Number of items per page. Defaults to 20.'
+            example: 20
+      responses:
+        200:
+          description: 'Example User Entry List'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 3451
+                      sport_event:
+                        id: 1201
+                        name: 'Mistrovstvi oblasti na kratke trati'
+                        date: '2026-05-16'
+                      race_profile:
+                        id: 101
+                        name: 'A12-0001 - Jan Novak'
+                      class_name: H21
+                      requested_start: '10:30'
+                      rent_si: false
+                      entry_stages:
+                        - stage1
+                      entry_status: created
+                      entry_created: '2026-05-01 20:15:00'
+                      created_at: '2026-05-01T20:15:00.000000Z'
+                      updated_at: '2026-05-01T20:15:00.000000Z'
+                  links:
+                    first: 'http://localhost/api/user/entry?page=1'
+                    last: null
+                    prev: null
+                    next: 'http://localhost/api/user/entry?page=2'
+                  meta:
+                    current_page: 1
+                    current_page_url: 'http://localhost/api/user/entry?page=1'
+                    from: 1
+                    path: 'http://localhost/api/user/entry'
+                    per_page: 20
+                    to: 1
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 3451
+                        sport_event:
+                          id: 1201
+                          name: 'Mistrovstvi oblasti na kratke trati'
+                          date: '2026-05-16'
+                        race_profile:
+                          id: 101
+                          name: 'A12-0001 - Jan Novak'
+                        class_name: H21
+                        requested_start: '10:30'
+                        rent_si: false
+                        entry_stages:
+                          - stage1
+                        entry_status: created
+                        entry_created: '2026-05-01 20:15:00'
+                        created_at: '2026-05-01T20:15:00.000000Z'
+                        updated_at: '2026-05-01T20:15:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 3451
+                        sport_event:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 1201
+                            name:
+                              type: string
+                              example: 'Mistrovstvi oblasti na kratke trati'
+                            date:
+                              type: string
+                              example: '2026-05-16'
+                        race_profile:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 101
+                            name:
+                              type: string
+                              example: 'A12-0001 - Jan Novak'
+                        class_name:
+                          type: string
+                          example: H21
+                        requested_start:
+                          type: string
+                          example: '10:30'
+                        rent_si:
+                          type: boolean
+                          example: false
+                        entry_stages:
+                          type: array
+                          example:
+                            - stage1
+                          items:
+                            type: string
+                        entry_status:
+                          type: string
+                          example: created
+                        entry_created:
+                          type: string
+                          example: '2026-05-01 20:15:00'
+                        created_at:
+                          type: string
+                          example: '2026-05-01T20:15:00.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2026-05-01T20:15:00.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://localhost/api/user/entry?page=1'
+                      last:
+                        type: string
+                        example: null
+                        nullable: true
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: 'http://localhost/api/user/entry?page=2'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      current_page_url:
+                        type: string
+                        example: 'http://localhost/api/user/entry?page=1'
+                      from:
+                        type: integer
+                        example: 1
+                      path:
+                        type: string
+                        example: 'http://localhost/api/user/entry'
+                      per_page:
+                        type: integer
+                        example: 20
+                      to:
+                        type: integer
+                        example: 1
+      tags:
+        - V1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+                  example: '2026-07-15'
+                  nullable: true
+                to:
+                  type: string
+                  description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+                  example: '2026-07-15'
+                  nullable: true
+                per_page:
+                  type: integer
+                  description: 'Must be at least 1. Must not be greater than 100.'
+                  example: 1
+                  nullable: true
+      security: []
+    post:
+      summary: 'Vytvoření přihlášky na závod'
+      operationId: vytvoenPihlkyNaZvod
+      description: 'Přihlásí závodní profil uživatele na závod — včetně štafet, etap a ORIS závodů.'
+      parameters: []
+      responses:
+        201:
+          description: 'Entry created'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 5301
+                    sport_event:
+                      id: 1201
+                      name: 'Mistrovstvi oblasti na kratke trati'
+                      date: '2026-05-16'
+                    race_profile:
+                      id: 12
+                      name: 'ABC1234 - Jan Novak'
+                    class_name: H21
+                    requested_start: null
+                    rent_si: false
+                    entry_stages: null
+                    entry_status: create
+                    oris_entry_id: 987654
+                    entry_created: '2026-05-02 18:21:05'
+                    created_at: '2026-05-02T18:21:05.000000Z'
+                    updated_at: '2026-05-02T18:21:05.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 5301
+                      sport_event:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1201
+                          name:
+                            type: string
+                            example: 'Mistrovstvi oblasti na kratke trati'
+                          date:
+                            type: string
+                            example: '2026-05-16'
+                      race_profile:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 12
+                          name:
+                            type: string
+                            example: 'ABC1234 - Jan Novak'
+                      class_name:
+                        type: string
+                        example: H21
+                      requested_start:
+                        type: string
+                        example: null
+                        nullable: true
+                      rent_si:
+                        type: boolean
+                        example: false
+                      entry_stages:
+                        type: string
+                        example: null
+                        nullable: true
+                      entry_status:
+                        type: string
+                        example: create
+                      oris_entry_id:
+                        type: integer
+                        example: 987654
+                      entry_created:
+                        type: string
+                        example: '2026-05-02 18:21:05'
+                      created_at:
+                        type: string
+                        example: '2026-05-02T18:21:05.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-05-02T18:21:05.000000Z'
+        403:
+          description: 'Foreign race profile'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Race profile does not belong to the authenticated user.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Race profile does not belong to the authenticated user.'
+        409:
+          description: 'Duplicate entry'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Race profile already has an entry for this event.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Race profile already has an entry for this event.'
+        422:
+          description: 'Business rule rejected the entry'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Entry deadline has passed.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Entry deadline has passed.'
+      tags:
+        - V1
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sport_event_id:
+                  type: integer
+                  description: 'ID of the sport event (see GET /api/v1/sport-event).'
+                  example: 1201
+                race_profile_id:
+                  type: integer
+                  description: "ID of one of the authenticated user's race profiles (see GET /api/v1/user/race-profiles)."
+                  example: 12
+                class_id:
+                  type: integer
+                  description: 'ID of the event class (see classes[].id in GET /api/v1/sport-event/{id}). Required for non-relay events.'
+                  example: 351
+                relay_team_member_id:
+                  type: integer
+                  description: 'Free relay slot ID (see relay_teams[].members[].relay_team_member_id in the event detail). Required for relay events instead of class_id.'
+                  example: 16
+                si:
+                  type: integer
+                  description: 'SI chip number. Defaults to the SI stored on the race profile.'
+                  example: 8123456
+                rent_si:
+                  type: boolean
+                  description: 'Request an SI chip rental.'
+                  example: false
+                note:
+                  type: string
+                  description: 'Note for the event organizer.'
+                  example: 'Note for organizer'
+                club_note:
+                  type: string
+                  description: 'Internal club note.'
+                  example: architecto
+                requested_start:
+                  type: string
+                  description: 'Requested start time.'
+                  example: architecto
+                entry_stages:
+                  type: array
+                  description: 'Stages to enter for multi-stage events, e.g. ["stage1", "stage2"] (see stage_options in the event detail).'
+                  example:
+                    - architecto
+                  items:
+                    type: string
+              required:
+                - sport_event_id
+                - race_profile_id
+      security: []
+  '/api/v1/user/entry/{userEntry_id}':
+    delete:
+      summary: 'Zrušení přihlášky'
+      operationId: zruenPihlky
+      description: 'Zruší přihlášku uživatele, u ORIS závodů včetně odhlášení v ORISu.'
+      parameters: []
+      responses:
+        200:
+          description: 'Entry cancelled'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 5301
+                    entry_status: cancel
+                    was_oris_entry: true
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 5301
+                      entry_status:
+                        type: string
+                        example: cancel
+                      was_oris_entry:
+                        type: boolean
+                        example: true
+        422:
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  -
+                    description: 'Deadline passed, entry cannot be cancelled'
+                    type: object
+                    example:
+                      message: 'Entry deadline has passed.'
+                    properties:
+                      message:
+                        type: string
+                        example: 'Entry deadline has passed.'
+                  -
+                    description: 'Already cancelled'
+                    type: object
+                    example:
+                      message: 'Entry is already cancelled.'
+                    properties:
+                      message:
+                        type: string
+                        example: 'Entry is already cancelled.'
+      tags:
+        - V1
+      security: []
+    parameters:
+      -
+        in: path
+        name: userEntry_id
+        description: 'The ID of the userEntry.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: userEntry
+        description: 'User entry ID (see GET /api/v1/user/entry).'
+        example: 5301
+        required: true
+        schema:
+          type: integer
+  /api/v1/user/credit-balance:
+    get:
+      summary: 'Zůstatek konta uživatele'
+      operationId: zstatekKontaUivatele
+      description: 'Vrátí aktuální zůstatek kreditu přihlášeného uživatele.'
+      parameters: []
+      responses:
+        200:
+          description: 'Example User Credit Balance'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    amount: 1250.5
+                    currency: CZK
+                    user_id: 15
+                    updated_at: '2026-04-15 11:10:00'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      amount:
+                        type: number
+                        example: 1250.5
+                      currency:
+                        type: string
+                        example: CZK
+                      user_id:
+                        type: integer
+                        example: 15
+                      updated_at:
+                        type: string
+                        example: '2026-04-15 11:10:00'
+      tags:
+        - V1
+      security: []
+  /api/v1/sport-event:
+    get:
+      summary: 'Seznam závodů a akcí'
+      operationId: seznamZvodAAkc
+      description: 'Vrátí stránkovaný seznam závodů a akcí klubu s možností filtrování.'
+      parameters:
+        -
+          in: query
+          name: from
+          description: 'Date from in Y-m-d format.'
+          example: '2026-01-01'
+          required: false
+          schema:
+            type: string
+            description: 'Date from in Y-m-d format.'
+            example: '2026-01-01'
+        -
+          in: query
+          name: to
+          description: 'Date to in Y-m-d format.'
+          example: '2026-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date to in Y-m-d format.'
+            example: '2026-12-31'
+        -
+          in: query
+          name: event_type
+          description: 'Filter by event type category. Allowed values: race, training, trainingCamp, other.'
+          example: race
+          required: false
+          schema:
+            type: string
+            description: 'Filter by event type category. Allowed values: race, training, trainingCamp, other.'
+            example: race
+        -
+          in: query
+          name: class_definition_id
+          description: 'Filter events by category/class definition ID assigned to the event.'
+          example: 15
+          required: false
+          schema:
+            type: integer
+            description: 'Filter events by category/class definition ID assigned to the event.'
+            example: 15
+        -
+          in: query
+          name: page
+          description: 'Page number for pagination.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Page number for pagination.'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: 'Number of items per page. Defaults to 20.'
+          example: 20
+          required: false
+          schema:
+            type: integer
+            description: 'Number of items per page. Defaults to 20.'
+            example: 20
+      responses:
+        200:
+          description: 'Example Sport Event List'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1201
+                      name: 'Mistrovstvi oblasti na kratke trati'
+                      date: '2026-05-16'
+                      entry_date: '2026-05-08 23:59:59'
+                      event_type:
+                        value: race
+                        label: Zavod
+                      oris_id: 8703
+                      use_oris_for_entries: true
+                      cancelled: false
+                      categories:
+                        -
+                          id: 15
+                          name: H21
+                        -
+                          id: 16
+                          name: D21
+                      created_at: '2026-03-01T10:20:11.000000Z'
+                      updated_at: '2026-03-05T15:42:00.000000Z'
+                  links:
+                    first: 'http://localhost/api/v1/sport-event/list?page=1'
+                    last: null
+                    prev: null
+                    next: 'http://localhost/api/v1/sport-event/list?page=2'
+                  meta:
+                    current_page: 1
+                    current_page_url: 'http://localhost/api/v1/sport-event/list?page=1'
+                    from: 1
+                    path: 'http://localhost/api/v1/sport-event/list'
+                    per_page: 20
+                    to: 1
+                  components:
+                    event_type_options:
+                      race: Zavod
+                      training: Trenink
+                      trainingCamp: Soustredeni
+                      other: Ostatni
+                    category_component_description: 'categories contains class definitions assigned to each event (SportClass -> SportClassDefinition).'
+                    event_type_component_description: 'event_type contains both machine value and translated label.'
+                properties:
+                  data:
+                    type: array
+                    example:
+                      -
+                        id: 1201
+                        name: 'Mistrovstvi oblasti na kratke trati'
+                        date: '2026-05-16'
+                        entry_date: '2026-05-08 23:59:59'
+                        event_type:
+                          value: race
+                          label: Zavod
+                        oris_id: 8703
+                        use_oris_for_entries: true
+                        cancelled: false
+                        categories:
+                          - id: 15
+                            name: H21
+                          - id: 16
+                            name: D21
+                        created_at: '2026-03-01T10:20:11.000000Z'
+                        updated_at: '2026-03-05T15:42:00.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1201
+                        name:
+                          type: string
+                          example: 'Mistrovstvi oblasti na kratke trati'
+                        date:
+                          type: string
+                          example: '2026-05-16'
+                        entry_date:
+                          type: string
+                          example: '2026-05-08 23:59:59'
+                        event_type:
+                          type: object
+                          properties:
+                            value:
+                              type: string
+                              example: race
+                            label:
+                              type: string
+                              example: Zavod
+                        oris_id:
+                          type: integer
+                          example: 8703
+                        use_oris_for_entries:
+                          type: boolean
+                          example: true
+                        cancelled:
+                          type: boolean
+                          example: false
+                        categories:
+                          type: array
+                          example:
+                            - id: 15
+                              name: H21
+                            - id: 16
+                              name: D21
+                          items:
+                            type: object
+                            properties:
+                              id:
+                                type: integer
+                                example: 15
+                              name:
+                                type: string
+                                example: H21
+                        created_at:
+                          type: string
+                          example: '2026-03-01T10:20:11.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2026-03-05T15:42:00.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://localhost/api/v1/sport-event/list?page=1'
+                      last:
+                        type: string
+                        example: null
+                        nullable: true
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: 'http://localhost/api/v1/sport-event/list?page=2'
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      current_page_url:
+                        type: string
+                        example: 'http://localhost/api/v1/sport-event/list?page=1'
+                      from:
+                        type: integer
+                        example: 1
+                      path:
+                        type: string
+                        example: 'http://localhost/api/v1/sport-event/list'
+                      per_page:
+                        type: integer
+                        example: 20
+                      to:
+                        type: integer
+                        example: 1
+                  components:
+                    type: object
+                    properties:
+                      event_type_options:
+                        type: object
+                        properties:
+                          race:
+                            type: string
+                            example: Zavod
+                          training:
+                            type: string
+                            example: Trenink
+                          trainingCamp:
+                            type: string
+                            example: Soustredeni
+                          other:
+                            type: string
+                            example: Ostatni
+                      category_component_description:
+                        type: string
+                        example: 'categories contains class definitions assigned to each event (SportClass -> SportClassDefinition).'
+                      event_type_component_description:
+                        type: string
+                        example: 'event_type contains both machine value and translated label.'
+      tags:
+        - V1
+      requestBody:
+        required: false
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                from:
+                  type: string
+                  description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+                  example: '2026-07-15'
+                  nullable: true
+                to:
+                  type: string
+                  description: 'Must be a valid date in the format <code>Y-m-d</code>.'
+                  example: '2026-07-15'
+                  nullable: true
+                event_type:
+                  type: string
+                  description: ''
+                  example: null
+                  nullable: true
+                class_definition_id:
+                  type: integer
+                  description: ''
+                  example: 16
+                  nullable: true
+                per_page:
+                  type: integer
+                  description: 'Must be at least 1. Must not be greater than 100.'
+                  example: 22
+                  nullable: true
+      security: []
+  '/api/v1/sport-event/{sportEvent_id}':
+    get:
+      summary: 'Detail závodu'
+      operationId: detailZvodu
+      description: 'Vrátí detail závodu včetně kategorií, štafet a možností etap pro přihlášení.'
+      parameters: []
+      responses:
+        200:
+          description: 'Example Sport Event Detail'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    id: 1201
+                    name: 'Mistrovstvi oblasti na kratke trati'
+                    alt_name: null
+                    oris_id: 8703
+                    use_oris_for_entries: true
+                    date: '2026-05-16'
+                    date_end: null
+                    place: 'Lipnice nad Sazavou'
+                    organization:
+                      - ABC
+                    region:
+                      - VC
+                    entry_desc: null
+                    event_info: 'Centrum zavodu na louce u obce.'
+                    event_warning: null
+                    event_type:
+                      value: race
+                      label: Zavod
+                    discipline:
+                      id: 2
+                      short_name: KT
+                      long_name: 'Kratka trat'
+                    level:
+                      id: 5
+                      short_name: OF
+                      long_name: 'Oblastni zebricek'
+                    is_relay: false
+                    cancelled: false
+                    cancelled_reason: null
+                    ranking: true
+                    ranking_coefficient: 1.02
+                    entry_dates:
+                      entry_date_1: '2026-05-08 23:59:59'
+                      entry_date_2: '2026-05-12 23:59:59'
+                      entry_date_3: null
+                      last_entry_date: '2026-05-12 23:59:59'
+                    entry_deadline_passed: false
+                    start_time: '10:00'
+                    gps:
+                      lat: '49.6122'
+                      lon: '15.4114'
+                    stages: null
+                    stage_options: []
+                    classes:
+                      -
+                        id: 351
+                        oris_id: 123456
+                        name: H21
+                        distance: '5.4'
+                        climbing: '120'
+                        controls: '18'
+                        fee: 150
+                        legs: null
+                        class_definition:
+                          id: 15
+                          name: H21
+                          gender: M
+                          age_from: 21
+                          age_to: 34
+                      -
+                        id: 352
+                        oris_id: 123457
+                        name: D21
+                        distance: '4.6'
+                        climbing: '95'
+                        controls: '16'
+                        fee: 150
+                        legs: null
+                        class_definition:
+                          id: 16
+                          name: D21
+                          gender: F
+                          age_from: 21
+                          age_to: 34
+                    services:
+                      -
+                        id: 12
+                        name: 'Ubytovani - telocvicna'
+                        unit_price: 100
+                        qty_available: 40
+                        qty_remaining: 25
+                        last_booking_date_time: '2026-05-08 23:59:59'
+                    links:
+                      -
+                        id: 77
+                        name: 'Rozpis zavodu'
+                        url: 'https://oris.orientacnisporty.cz/Zavod?id=8703'
+                        type: oris
+                    relay_teams: []
+                    created_at: '2026-03-01T10:20:11.000000Z'
+                    updated_at: '2026-03-05T15:42:00.000000Z'
+                properties:
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: integer
+                        example: 1201
+                      name:
+                        type: string
+                        example: 'Mistrovstvi oblasti na kratke trati'
+                      alt_name:
+                        type: string
+                        example: null
+                        nullable: true
+                      oris_id:
+                        type: integer
+                        example: 8703
+                      use_oris_for_entries:
+                        type: boolean
+                        example: true
+                      date:
+                        type: string
+                        example: '2026-05-16'
+                      date_end:
+                        type: string
+                        example: null
+                        nullable: true
+                      place:
+                        type: string
+                        example: 'Lipnice nad Sazavou'
+                      organization:
+                        type: array
+                        example:
+                          - ABC
+                        items:
+                          type: string
+                      region:
+                        type: array
+                        example:
+                          - VC
+                        items:
+                          type: string
+                      entry_desc:
+                        type: string
+                        example: null
+                        nullable: true
+                      event_info:
+                        type: string
+                        example: 'Centrum zavodu na louce u obce.'
+                      event_warning:
+                        type: string
+                        example: null
+                        nullable: true
+                      event_type:
+                        type: object
+                        properties:
+                          value:
+                            type: string
+                            example: race
+                          label:
+                            type: string
+                            example: Zavod
+                      discipline:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          short_name:
+                            type: string
+                            example: KT
+                          long_name:
+                            type: string
+                            example: 'Kratka trat'
+                      level:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 5
+                          short_name:
+                            type: string
+                            example: OF
+                          long_name:
+                            type: string
+                            example: 'Oblastni zebricek'
+                      is_relay:
+                        type: boolean
+                        example: false
+                      cancelled:
+                        type: boolean
+                        example: false
+                      cancelled_reason:
+                        type: string
+                        example: null
+                        nullable: true
+                      ranking:
+                        type: boolean
+                        example: true
+                      ranking_coefficient:
+                        type: number
+                        example: 1.02
+                      entry_dates:
+                        type: object
+                        properties:
+                          entry_date_1:
+                            type: string
+                            example: '2026-05-08 23:59:59'
+                          entry_date_2:
+                            type: string
+                            example: '2026-05-12 23:59:59'
+                          entry_date_3:
+                            type: string
+                            example: null
+                            nullable: true
+                          last_entry_date:
+                            type: string
+                            example: '2026-05-12 23:59:59'
+                      entry_deadline_passed:
+                        type: boolean
+                        example: false
+                      start_time:
+                        type: string
+                        example: '10:00'
+                      gps:
+                        type: object
+                        properties:
+                          lat:
+                            type: string
+                            example: '49.6122'
+                          lon:
+                            type: string
+                            example: '15.4114'
+                      stages:
+                        type: string
+                        example: null
+                        nullable: true
+                      stage_options:
+                        type: array
+                        example: []
+                      classes:
+                        type: array
+                        example:
+                          -
+                            id: 351
+                            oris_id: 123456
+                            name: H21
+                            distance: '5.4'
+                            climbing: '120'
+                            controls: '18'
+                            fee: 150
+                            legs: null
+                            class_definition:
+                              id: 15
+                              name: H21
+                              gender: M
+                              age_from: 21
+                              age_to: 34
+                          -
+                            id: 352
+                            oris_id: 123457
+                            name: D21
+                            distance: '4.6'
+                            climbing: '95'
+                            controls: '16'
+                            fee: 150
+                            legs: null
+                            class_definition:
+                              id: 16
+                              name: D21
+                              gender: F
+                              age_from: 21
+                              age_to: 34
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 351
+                            oris_id:
+                              type: integer
+                              example: 123456
+                            name:
+                              type: string
+                              example: H21
+                            distance:
+                              type: string
+                              example: '5.4'
+                            climbing:
+                              type: string
+                              example: '120'
+                            controls:
+                              type: string
+                              example: '18'
+                            fee:
+                              type: integer
+                              example: 150
+                            legs:
+                              type: string
+                              example: null
+                              nullable: true
+                            class_definition:
+                              type: object
+                              properties:
+                                id:
+                                  type: integer
+                                  example: 15
+                                name:
+                                  type: string
+                                  example: H21
+                                gender:
+                                  type: string
+                                  example: M
+                                age_from:
+                                  type: integer
+                                  example: 21
+                                age_to:
+                                  type: integer
+                                  example: 34
+                      services:
+                        type: array
+                        example:
+                          - id: 12
+                            name: 'Ubytovani - telocvicna'
+                            unit_price: 100
+                            qty_available: 40
+                            qty_remaining: 25
+                            last_booking_date_time: '2026-05-08 23:59:59'
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 12
+                            name:
+                              type: string
+                              example: 'Ubytovani - telocvicna'
+                            unit_price:
+                              type: integer
+                              example: 100
+                            qty_available:
+                              type: integer
+                              example: 40
+                            qty_remaining:
+                              type: integer
+                              example: 25
+                            last_booking_date_time:
+                              type: string
+                              example: '2026-05-08 23:59:59'
+                      links:
+                        type: array
+                        example:
+                          - id: 77
+                            name: 'Rozpis zavodu'
+                            url: 'https://oris.orientacnisporty.cz/Zavod?id=8703'
+                            type: oris
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: integer
+                              example: 77
+                            name:
+                              type: string
+                              example: 'Rozpis zavodu'
+                            url:
+                              type: string
+                              example: 'https://oris.orientacnisporty.cz/Zavod?id=8703'
+                            type:
+                              type: string
+                              example: oris
+                      relay_teams:
+                        type: array
+                        example: []
+                      created_at:
+                        type: string
+                        example: '2026-03-01T10:20:11.000000Z'
+                      updated_at:
+                        type: string
+                        example: '2026-03-05T15:42:00.000000Z'
+        404:
+          description: 'Sport event not found'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  message: 'Not found.'
+                properties:
+                  message:
+                    type: string
+                    example: 'Not found.'
+      tags:
+        - V1
+      security: []
+    parameters:
+      -
+        in: path
+        name: sportEvent_id
+        description: 'The ID of the sportEvent.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+      -
+        in: path
+        name: sportEvent
+        description: 'Sport event ID.'
+        example: 1201
+        required: true
+        schema:
+          type: integer
+  /api/v1/post:
+    get:
+      summary: 'Seznam příspěvků'
+      operationId: seznamPspvk
+      description: 'Vrátí stránkovaný seznam novinek a příspěvků klubu.'
+      parameters:
+        -
+          in: query
+          name: from
+          description: 'Date from in Y-M-D'
+          example: '2024-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date from in Y-M-D'
+            example: '2024-12-31'
+        -
+          in: query
+          name: to
+          description: 'Date to in Y-M-D'
+          example: '2024-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date to in Y-M-D'
+            example: '2024-12-31'
+        -
+          in: query
+          name: page
+          description: 'Filter by whether a post is public or not.'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by whether a post is public or not.'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: "Field to sort by. Defaults to 'id'."
+          example: architecto
+          required: false
+          schema:
+            type: string
+            description: "Field to sort by. Defaults to 'id'."
+            example: architecto
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      user_id: 1
+                      title: 'Novinka jak noha'
+                      editorial: null
+                      img_url: null
+                      content: 'Toto je prvn9 novinka'
+                      content_mode: 2
+                      private: 1
+                      created_at: '2025-10-05T21:26:52.000000Z'
+                      updated_at: '2025-10-05T21:26:52.000000Z'
+                  links:
+                    first: 'http://localhost/api/v1/posts/list?page=1'
+                    last: null
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    current_page_url: 'http://localhost/api/v1/posts/list?page=1'
+                    from: 1
+                    path: 'http://localhost/api/v1/posts/list'
+                    per_page: 20
+                    to: 1
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id: 1
+                        user_id: 1
+                        title: 'Novinka jak noha'
+                        editorial: null
+                        img_url: null
+                        content: 'Toto je prvn9 novinka'
+                        content_mode: 2
+                        private: 1
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: 'Novinka jak noha'
+                        editorial:
+                          type: string
+                          example: null
+                          nullable: true
+                        img_url:
+                          type: string
+                          example: null
+                          nullable: true
+                        content:
+                          type: string
+                          example: 'Toto je prvn9 novinka'
+                        content_mode:
+                          type: integer
+                          example: 2
+                        private:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2025-10-05T21:26:52.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2025-10-05T21:26:52.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list?page=1'
+                      last:
+                        type: string
+                        example: null
+                        nullable: true
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: null
+                        nullable: true
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      current_page_url:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list?page=1'
+                      from:
+                        type: integer
+                        example: 1
+                      path:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list'
+                      per_page:
+                        type: integer
+                        example: 20
+                      to:
+                        type: integer
+                        example: 1
+      tags:
+        - V1
+      security: []
+  '/api/v1/post/{post_id}':
+    get:
+      summary: 'Detail příspěvku'
+      operationId: detailPspvku
+      description: 'Vrátí detail konkrétního příspěvku podle ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  -
+                    description: ''
+                    type: object
+                    example:
+                      data:
+                        id: 1
+                        user_id: 1
+                        title: 'Novinka jak noha'
+                        editorial: null
+                        img_url: null
+                        content: 'Toto je prvn9 novinka'
+                        content_mode: 2
+                        private: 1
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1
+                          title:
+                            type: string
+                            example: 'Novinka jak noha'
+                          editorial:
+                            type: string
+                            example: null
+                            nullable: true
+                          img_url:
+                            type: string
+                            example: null
+                            nullable: true
+                          content:
+                            type: string
+                            example: 'Toto je prvn9 novinka'
+                          content_mode:
+                            type: integer
+                            example: 2
+                          private:
+                            type: integer
+                            example: 1
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                  -
+                    description: 'Example with HTML content (content_mode = 1)'
+                    type: object
+                    example:
+                      data:
+                        id: 2
+                        user_id: 1
+                        title: '<h1>HTML Post</h1>'
+                        editorial: null
+                        img_url: null
+                        content: '<p>This is HTML content</p>'
+                        content_mode: 1
+                        private: 0
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          user_id:
+                            type: integer
+                            example: 1
+                          title:
+                            type: string
+                            example: '<h1>HTML Post</h1>'
+                          editorial:
+                            type: string
+                            example: null
+                            nullable: true
+                          img_url:
+                            type: string
+                            example: null
+                            nullable: true
+                          content:
+                            type: string
+                            example: '<p>This is HTML content</p>'
+                          content_mode:
+                            type: integer
+                            example: 1
+                          private:
+                            type: integer
+                            example: 0
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                  -
+                    description: 'Example with TipTap JSON content (content_mode = 3)'
+                    type: object
+                    example:
+                      data:
+                        id: 3
+                        user_id: 1
+                        title: 'TipTap Post'
+                        editorial: null
+                        img_url: null
+                        content:
+                          type: doc
+                          content:
+                            -
+                              type: paragraph
+                              content:
+                                -
+                                  type: text
+                                  text: 'This is TipTap JSON content'
+                        content_mode: 3
+                        private: 0
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 3
+                          user_id:
+                            type: integer
+                            example: 1
+                          title:
+                            type: string
+                            example: 'TipTap Post'
+                          editorial:
+                            type: string
+                            example: null
+                            nullable: true
+                          img_url:
+                            type: string
+                            example: null
+                            nullable: true
+                          content:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: doc
+                              content:
+                                type: array
+                                example:
+                                  -
+                                    type: paragraph
+                                    content:
+                                      - { type: text, text: 'This is TipTap JSON content' }
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: paragraph
+                                    content:
+                                      type: array
+                                      example: [{ type: text, text: 'This is TipTap JSON content' }]
+                                      items: { type: object, properties: { type: { type: string, example: text }, text: { type: string, example: 'This is TipTap JSON content' } } }
+                          content_mode:
+                            type: integer
+                            example: 3
+                          private:
+                            type: integer
+                            example: 0
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+      tags:
+        - V1
+      security: []
+    parameters:
+      -
+        in: path
+        name: post_id
+        description: 'The ID of the post.'
+        example: 1
+        required: true
+        schema:
+          type: integer
+  /api/v1/page:
+    get:
+      summary: 'Seznam stránek'
+      operationId: seznamStrnek
+      description: 'Vrátí stránkovaný seznam obsahových stránek klubu.'
+      parameters:
+        -
+          in: query
+          name: from
+          description: 'Date from in Y-M-D format'
+          example: '2024-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date from in Y-M-D format'
+            example: '2024-12-31'
+        -
+          in: query
+          name: to
+          description: 'Date to in Y-M-D format'
+          example: '2024-12-31'
+          required: false
+          schema:
+            type: string
+            description: 'Date to in Y-M-D format'
+            example: '2024-12-31'
+        -
+          in: query
+          name: page
+          description: 'Page number for pagination'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Page number for pagination'
+            example: 1
+        -
+          in: query
+          name: per_page
+          description: 'Number of items per page. Defaults to 20.'
+          example: 20
+          required: false
+          schema:
+            type: integer
+            description: 'Number of items per page. Defaults to 20.'
+            example: 20
+        -
+          in: query
+          name: status
+          description: 'Filter by page status (open, close, draft, archive)'
+          example: open
+          required: false
+          schema:
+            type: string
+            description: 'Filter by page status (open, close, draft, archive)'
+            example: open
+        -
+          in: query
+          name: content_category_id
+          description: 'Filter by content category ID'
+          example: 1
+          required: false
+          schema:
+            type: integer
+            description: 'Filter by content category ID'
+            example: 1
+      responses:
+        200:
+          description: 'Example Page List'
+          content:
+            application/json:
+              schema:
+                type: object
+                example:
+                  data:
+                    -
+                      id: 1
+                      user_id: 1
+                      title: 'Novinka jak noha'
+                      editorial: null
+                      img_url: null
+                      content: 'Toto je prvn9 novinka'
+                      content_mode: 2
+                      private: 1
+                      created_at: '2025-10-05T21:26:52.000000Z'
+                      updated_at: '2025-10-05T21:26:52.000000Z'
+                  links:
+                    first: 'http://localhost/api/v1/posts/list?page=1'
+                    last: null
+                    prev: null
+                    next: null
+                  meta:
+                    current_page: 1
+                    current_page_url: 'http://localhost/api/v1/posts/list?page=1'
+                    from: 1
+                    path: 'http://localhost/api/v1/posts/list'
+                    per_page: 20
+                    to: 1
+                properties:
+                  data:
+                    type: array
+                    example:
+                      - id: 1
+                        user_id: 1
+                        title: 'Novinka jak noha'
+                        editorial: null
+                        img_url: null
+                        content: 'Toto je prvn9 novinka'
+                        content_mode: 2
+                        private: 1
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    items:
+                      type: object
+                      properties:
+                        id:
+                          type: integer
+                          example: 1
+                        user_id:
+                          type: integer
+                          example: 1
+                        title:
+                          type: string
+                          example: 'Novinka jak noha'
+                        editorial:
+                          type: string
+                          example: null
+                          nullable: true
+                        img_url:
+                          type: string
+                          example: null
+                          nullable: true
+                        content:
+                          type: string
+                          example: 'Toto je prvn9 novinka'
+                        content_mode:
+                          type: integer
+                          example: 2
+                        private:
+                          type: integer
+                          example: 1
+                        created_at:
+                          type: string
+                          example: '2025-10-05T21:26:52.000000Z'
+                        updated_at:
+                          type: string
+                          example: '2025-10-05T21:26:52.000000Z'
+                  links:
+                    type: object
+                    properties:
+                      first:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list?page=1'
+                      last:
+                        type: string
+                        example: null
+                        nullable: true
+                      prev:
+                        type: string
+                        example: null
+                        nullable: true
+                      next:
+                        type: string
+                        example: null
+                        nullable: true
+                  meta:
+                    type: object
+                    properties:
+                      current_page:
+                        type: integer
+                        example: 1
+                      current_page_url:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list?page=1'
+                      from:
+                        type: integer
+                        example: 1
+                      path:
+                        type: string
+                        example: 'http://localhost/api/v1/posts/list'
+                      per_page:
+                        type: integer
+                        example: 20
+                      to:
+                        type: integer
+                        example: 1
+      tags:
+        - V1
+      security: []
+  '/api/v1/page/{page_id}':
+    get:
+      summary: 'Detail stránky'
+      operationId: detailStrnky
+      description: 'Vrátí detail konkrétní obsahové stránky podle ID.'
+      parameters: []
+      responses:
+        200:
+          description: ''
+          content:
+            application/json:
+              schema:
+                oneOf:
+                  -
+                    description: 'Example with HTML content (content_format = 1)'
+                    type: object
+                    example:
+                      data:
+                        id: 2
+                        user_id: 1
+                        content_category_id: null
+                        title: Kontakt
+                        slug: kontakt
+                        content: '<h1>Kontakt</h1><p>This is HTML content</p>'
+                        content_format: 1
+                        picture_attachment: ''
+                        status: open
+                        weight: 30
+                        page_menu: true
+                        meta: null
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 2
+                          user_id:
+                            type: integer
+                            example: 1
+                          content_category_id:
+                            type: string
+                            example: null
+                            nullable: true
+                          title:
+                            type: string
+                            example: Kontakt
+                          slug:
+                            type: string
+                            example: kontakt
+                          content:
+                            type: string
+                            example: '<h1>Kontakt</h1><p>This is HTML content</p>'
+                          content_format:
+                            type: integer
+                            example: 1
+                          picture_attachment:
+                            type: string
+                            example: ''
+                          status:
+                            type: string
+                            example: open
+                          weight:
+                            type: integer
+                            example: 30
+                          page_menu:
+                            type: boolean
+                            example: true
+                          meta:
+                            type: string
+                            example: null
+                            nullable: true
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                  -
+                    description: 'Example with Markdown content (content_format = 2)'
+                    type: object
+                    example:
+                      data:
+                        id: 1
+                        user_id: 1
+                        content_category_id: 1
+                        title: 'O nás'
+                        slug: o-nas
+                        content: "# O nás\n\nToto je obsah stránky v Markdown formátu."
+                        content_format: 2
+                        picture_attachment: image.jpg
+                        status: open
+                        weight: 50
+                        page_menu: true
+                        meta:
+                          description: 'Stránka o nás'
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 1
+                          user_id:
+                            type: integer
+                            example: 1
+                          content_category_id:
+                            type: integer
+                            example: 1
+                          title:
+                            type: string
+                            example: 'O nás'
+                          slug:
+                            type: string
+                            example: o-nas
+                          content:
+                            type: string
+                            example: "# O nás\n\nToto je obsah stránky v Markdown formátu."
+                          content_format:
+                            type: integer
+                            example: 2
+                          picture_attachment:
+                            type: string
+                            example: image.jpg
+                          status:
+                            type: string
+                            example: open
+                          weight:
+                            type: integer
+                            example: 50
+                          page_menu:
+                            type: boolean
+                            example: true
+                          meta:
+                            type: object
+                            properties:
+                              description:
+                                type: string
+                                example: 'Stránka o nás'
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                  -
+                    description: 'Example with TipTap JSON content (content_format = 3)'
+                    type: object
+                    example:
+                      data:
+                        id: 3
+                        user_id: 1
+                        content_category_id: 2
+                        title: 'TipTap Page'
+                        slug: tiptap-page
+                        content:
+                          type: doc
+                          content:
+                            -
+                              type: paragraph
+                              content:
+                                -
+                                  type: text
+                                  text: 'This is TipTap JSON content'
+                        content_format: 3
+                        picture_attachment: null
+                        status: open
+                        weight: 10
+                        page_menu: false
+                        meta:
+                          keywords: 'tiptap, json'
+                        created_at: '2025-10-05T21:26:52.000000Z'
+                        updated_at: '2025-10-05T21:26:52.000000Z'
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          id:
+                            type: integer
+                            example: 3
+                          user_id:
+                            type: integer
+                            example: 1
+                          content_category_id:
+                            type: integer
+                            example: 2
+                          title:
+                            type: string
+                            example: 'TipTap Page'
+                          slug:
+                            type: string
+                            example: tiptap-page
+                          content:
+                            type: object
+                            properties:
+                              type:
+                                type: string
+                                example: doc
+                              content:
+                                type: array
+                                example:
+                                  -
+                                    type: paragraph
+                                    content:
+                                      - { type: text, text: 'This is TipTap JSON content' }
+                                items:
+                                  type: object
+                                  properties:
+                                    type:
+                                      type: string
+                                      example: paragraph
+                                    content:
+                                      type: array
+                                      example: [{ type: text, text: 'This is TipTap JSON content' }]
+                                      items: { type: object, properties: { type: { type: string, example: text }, text: { type: string, example: 'This is TipTap JSON content' } } }
+                          content_format:
+                            type: integer
+                            example: 3
+                          picture_attachment:
+                            type: string
+                            example: null
+                            nullable: true
+                          status:
+                            type: string
+                            example: open
+                          weight:
+                            type: integer
+                            example: 10
+                          page_menu:
+                            type: boolean
+                            example: false
+                          meta:
+                            type: object
+                            properties:
+                              keywords:
+                                type: string
+                                example: 'tiptap, json'
+                          created_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+                          updated_at:
+                            type: string
+                            example: '2025-10-05T21:26:52.000000Z'
+      tags:
+        - V1
+      security: []
+    parameters:
+      -
+        in: path
+        name: page_id
+        description: 'The ID of the page.'
+        example: 1
+        required: true
+        schema:
+          type: integer

@@ -1,0 +1,51 @@
+# Odeslané e-maily
+
+Přehled **Odeslané e-maily** v administračním panelu zobrazuje historii všech e-mailových zpráv,
+které systém odeslal — přihlašovací potvrzení, upozornění na závody, e-maily s vyúčtováním
+a vše ostatní, co aplikace rozesílá členům klubu.
+
+## Co v přehledu vidím
+
+Každý záznam obsahuje:
+
+- **Odesláno** — datum a čas odeslání zprávy
+- **Příjemce** — e-mailová adresa (nebo více adres) příjemce
+- **Předmět** — předmět e-mailové zprávy
+- **Typ e-mailu** — druh zprávy (badge identifikuje šablonu, např. `PreRaceSummaryMail`)
+- **Zdroj** — kdo nebo co odeslání spustilo (viz níže)
+- **Spustil uživatel** — jméno přihlášeného uživatele, pokud e-mail odeslal manuálně
+
+## Zdroj odeslání
+
+Sloupec **Zdroj** rozlišuje tři případy:
+
+| Zdroj | Popis |
+|---|---|
+| Uživatel | E-mail odeslal přihlášený uživatel (např. hromadné upozornění na závod) |
+| Automaticky (cron) | E-mail odeslal automatický plánovač (noční/hodinové úlohy) |
+| Systém | E-mail odeslal systém bez kontextu uživatele (např. registrační formulář nebo obnova hesla) |
+
+:::info{title="Jak se zdroj určí"}
+Zdroj se zaznamenává v okamžiku, kdy se odeslání spustí — a to i u zpráv, které se reálně
+odešlou se zpožděním z fronty. Díky tomu zůstává u zprávy správně uvedeno, kdo ji vyvolal,
+ne kdo ji nakonec doručil.
+:::
+
+## Filtrování záznamů
+
+Záznamy lze filtrovat pomocí panelu filtrů (ikona trychtýře vpravo nahoře):
+
+1. **Příjemce** — zadejte část e-mailové adresy pro vyhledání zpráv konkrétní osobě
+2. **Odesláno od / do** — omezení na časový rozsah
+3. **Typ e-mailu** — výběr konkrétního druhu zprávy
+4. **Zdroj** — filtrování podle toho, kdo odeslání spustil
+
+:::tip
+Přehled je seřazen od nejnovějšího záznamu. Záznamy se nedají mazat ani upravovat —
+slouží pouze k prohlížení.
+:::
+
+:::info{title="Kdo má přístup"}
+Přístup k přehledu odeslaných e-mailů řídí oprávnění v systému rolí. Přehled je viditelný
+uživatelům, kteří mají příslušné oprávnění přiděleno správcem klubu nebo Super adminem.
+:::

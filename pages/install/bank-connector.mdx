@@ -1,0 +1,70 @@
+# Napojení na banku
+
+Napojení na banku je volitelný modul, který umožňuje automatické stahování bankovních transakcí a jejich párování
+s platbami (např. členské příspěvky). Modul se zapíná v administraci na stránce **Nastavení**
+(`/admin/config/settings`) přepínačem **„Modul napojení na banku je zapnutý“**. Vypnutí modulu skryje bankovní
+výpis i správu napojení v celé aplikaci a zastaví stahování transakcí — uložená data zůstanou zachována.
+
+Aby transakce začaly chodit, je potřeba:
+
+- Zapnutý modul napojení na banku v **Nastavení**.
+- Minimálně **jedno aktivní bankovní napojení** (viz níže).
+- **Automatické zpracování plateb aktivní** v nastavení stránek.
+- Platby zaslané pod **správným variabilním symbolem**.
+
+## Správa bankovních napojení
+
+Jednotlivá bankovní napojení se spravují přímo v administraci na stránce **Konfigurace → Bankovní napojení**
+(dostupná jen když je modul zapnutý). Pro každé napojení se zadává:
+
+- **Název** — libovolný popisný název napojení.
+- **Banka (konektor)** — výběr z podporovaných konektorů, viz níže. Po založení napojení konektor nelze změnit —
+  je nutné napojení smazat a založit nové.
+- **Měna** — v současnosti pouze `CZK`.
+- **Aktivní** — transakce se stahují jen z aktivních napojení.
+- **Přístupové údaje** — pole se liší podle zvoleného konektoru (viz tabulky níže).
+
+:::info{title="Přístupové údaje jsou write-only"}
+Přístupové údaje (tokeny, ID účtu) se ukládají **šifrovaně** a po uložení se už nikdy nezobrazí zpět ve formuláři.
+Při editaci existujícího napojení stačí ponechat pole prázdné, aby zůstala zachována dříve uložená hodnota —
+vyplní se jen pole, která chcete změnit. Zástupný text ve formuláři ukazuje jen poslední 4 znaky uložené hodnoty
+(např. `••••1234`) jako kontrolu, že je něco uloženo.
+:::
+
+## Konektory
+
+V současnosti jsou implementovány konektory na banku **Moneta Money Bank** a **Fio banka**.
+
+- `monetaMoneyBank` — Moneta Money Bank
+- `fioBank` — Fio banka
+
+### Konektor — Moneta Money Bank
+
+![Moneta Money Bank](./img/logo-moneta-money-bank.jpg)
+
+Povinná přístupová pole, která získáte od majitele bankovního účtu. Token je nutné jednou ročně obnovit:
+
+| Pole | Popis |
+| --- | --- |
+| `token` | API token |
+| `account_id` | ID účtu (`account_id`) |
+
+### Konektor — Fio banka
+
+![Fio banka](./img/fio_banka_logo.png)
+
+Návod na získání **API tokenu** naleznete [zde](https://www.fio.cz/bankovni-sluzby/api-bankovnictvi).
+
+| Pole | Popis |
+| --- | --- |
+| `token` | API token |
+
+Token je nutné jednou ročně obnovit. Případně je možné nechat `token` periodicky obnovovat na straně banky.
+
+:::warning{title="Upozornění"}
+Konektor data pouze **stahuje**, neposílá nic zpět do banky. Pro vyšší bezpečnost si nechte vygenerovat token
+**pouze pro čtení**.
+
+Pokud již máte token vygenerovaný pro jinou aplikaci, nechte si pro vyšší bezpečnost vygenerovat **nový token
+pro tuto aplikaci**. Nesdílejte tokeny mezi různými aplikacemi.
+:::

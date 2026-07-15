@@ -1,0 +1,95 @@
+# Novinky v aktuální verzi
+
+## Verze 13.0 <Badge type="info" text="07.2026" />
+
+### ✨ Nové funkce
+
+- **Tržiště** — nový volitelný modul umožňuje členům vystavovat časově omezené nabídky produktů (za sebe nebo za oddíl), ostatním je objednávat a po uzavření nabídky náklady rozúčtovat — buď stržením z osobního konta, nebo přímou platbou mimo systém. Prošlé nabídky se uzavírají automaticky. Více v [nápovědě](/napoveda/trziste).
+- **Napojení na banku** — nový volitelný modul pro automatické stahování bankovních transakcí (Moneta Money Bank, Fio banka). Bankovní napojení se nyní zakládají a spravují přímo v administraci, přístupové údaje se ukládají šifrovaně a po uložení se ve formuláři už nezobrazují. Více v [instalační dokumentaci](/install/bank-connector).
+
+### 🔒 Bezpečnost
+
+- **API klíče se ukládají hashované** — v databázi je nově uložen jen hash API klíče, ne jeho plaintext. Klíč se po vygenerování zobrazí **pouze jednou**. **Důležité:** pokud používáte veřejné API, je nutné si po aktualizaci přegenerovat API klíč na stránce Uživatelského nastavení — starý klíč přestane fungovat.
+- **Šifrování přístupových údajů k bankovnímu účtu** — údaje k napojení na banku (tokeny, ID účtu) se nově ukládají šifrovaně.
+
+## Verze 12.2 <Badge type="info" text="06.2026" />
+
+### ✨ Nové funkce
+
+- **Odeslané e-maily** — nový přehled v administraci zobrazuje historii všech e-mailů odeslaných aplikací. Záznamy jsou opatřeny informací o příjemci, předmětu, typu zprávy a zdroji odeslání (uživatel / automatický plánovač / systém). Přehled podporuje filtrování podle příjemce, data, typu e-mailu a zdroje. Více v [nápovědě](/napoveda/odeslane-emaily).
+
+## Verze 12.1 <Badge type="info" text="04.2026" />
+
+### ✨ Nové funkce
+
+- **Moje nejbližší závody na nástěnce** — stránka Uživatelského nastavení zobrazuje dvě nejbližší nadcházející přihlášky přímo na nástěnce bez nutnosti přecházet na stránku přihlášek
+
+### 🔧 Vylepšení
+
+- **Termíny přihlášek jako barevné dlaždice** — termíny přihlášek v přehledu závodů jsou nově zobrazeny jako přehledné dlaždice s barevným rozlišením: zelená (otevřeno), oranžová (blíží se uzávěrka), šedá (prošlé)
+- **Místo konání v přehledu závodů** — u každého závodu se pod názvem zobrazuje místo konání
+- **Předpověď počasí** — opraveno zobrazení ikon pro oblačné a deštivé počasí v nočních hodinách
+- **Nástěnka Uživatelského nastavení** — přepracované kartičky s vylepšeným vzhledem a doplněnou kartou nejbližších závodů
+
+### 🪲 Opravy
+
+- **Přihlašovací formulář — vyhledávání závodníka** — opraveno vyhledávání závodníka přes ORIS ID (dříve se hledalo podle interního ID)
+- **Formát datumů a časů** — odstraněny nadbytečné mezery v zobrazovaných datech (např. `1.4.2026` místo `1. 4. 2026`)
+
+---
+
+## Verze 12.0 <Badge type="info" text="06.01.2026" />
+
+### 📣 Novinky
+- Projekt byl převeden na **Laravel v12.x**
+- Dále jsme přešli na **FilamentPHP v5.x**
+- S tímto souvísí i navýšení verze **TailwindCSS 4.x**
+- Celkem bylo přepsáno velké množství kódu. Může se toho hodně rozbít :-)
+
+
+### ✨ Nové funkce
+
+- **Export ČSOS** — závodní přihlášky lze nyní exportovat ve formátu IOF XML v3 pro import do systému ČSOS
+- **API pro stránky a příspěvky** — nové veřejné endpointy `/api/v1/pages` a `/api/v1/posts` umožňují strojové dotazování na obsah CMS
+- **Správa API klíče** — v Uživatelském nastavení lze generovat a spravovat vlastní API klíč pro přístup k veřejnému API
+- **Filtry závodů s UUID** — závodní filtry nyní mají stabilní UUID identifikátory pro spolehlivé reference
+
+### 🔧 Vylepšení
+
+- **Filtry zobrazení** - tyto umožňují uživateslky definovat záložky zobrazení rychlých filtrů na stránce závodů. 
+Myšlenka byla taková, že si každý uživatel vytvoří vlastní záložky podle typů závodů kterých se zůčastnuje.
+Pokud něko nechodí na tréninky, vůbec tyto nikdy nemusí vidět apod.
+
+- **API Klíč** - Vzniklo nové veřejné api pro strojové dotazování na systém. Prozatím jsou dostupné
+vybrané endPointy, nicméně toto je by měla být výkop dalších možností.
+
+V sekci **CMS Stránky** je možné zvolit ze tří typů tvorby obsahu.
+- stávající _Markdown_ a _HTML_ obohatil **TipTap** editor, který umožňuje do databáze ukládat objekty,
+které mohou mít vlastní stylování. Jedná se o celkem mocný pro zobrazování obsahu tak aby styl
+byl vždy pod kontrolou systému (uživateli by se nemělo podařit nějaký nevhodným html tagem rozbít stránku).
+- **Upgrade na Filament v5** — administrační panel byl aktualizován na novou hlavní verzi s vylepšeným vzhledem a výkonem
+- **TipTap editor pro stránky** — CMS stránky nově podporují vizuální editor TipTap (vedle stávajícího Markdown a HTML); umožňuje vkládat vlastní boxy a upozornění
+- **Skupinové zobrazení kategorií v přihlášce** — kategorie závodů jsou při přihlašování přehledně rozděleny do skupin
+- **Export přihlášek** — aktualizovaný export závodních přihlášek s rozšířenými možnostmi
+- **Opravena tmavá verze frontendu** — dark mode na veřejných stránkách zobrazuje barvy správně
+- **Kód klubu z konfigurace** — ORIS API dotazy nově využívají kód klubu ze sdílené konfigurace místo pevně zadané hodnoty
+- **Jednotný formát data a času** — celá aplikace používá konstanty `AppHelper::DATE_*_FORMAT` pro konzistentní zobrazení datumů
+
+### 🪲 Opravy
+
+- **Výběr kategorie při přihlášení na závod** — opravena chyba kdy nebylo možné vybrat kategorii při vytváření nebo přihlašování na závod
+- **Discord notifikace** — opraveno tiché selhání při odeslání webhookové zprávy na neznámou nebo prázdnou URL
+- **Bankovní transakce** — opravena fatální chyba při zpracování transakce s neznámým kódem banky, která zastavila celý cron job
+- **Rozložení kreditů uživatele** — opraveno zobrazení stránky detailu kreditu v admin panelu
+- **Chybné texty a překlepy** — opraveny překlepy a chybějící háčky/čárky v UI
+- **Zobrazení uvítací stránky** — opravena chyba při renderování welcome page
+- **Tooltip texty** — opraveny popisky v admin panelu
+
+### 🔒 Bezpečnost
+
+- **Generování hesel** — nahrazeno zastaralé `sha1(time())` kryptograficky bezpečnou funkcí `Str::random()`
+- **Odstraněna nezabezpečená testovací routa** — `/admin/test` umožňovala neautentizovaným návštěvníkům přegenerovat API klíč správce; odstraněno
+- **HTTPS session cookie** — session cookie je nyní ve výchozím nastavení odesílána pouze přes HTTPS
+
+#### Poděkování
+[onovy](https://github.com/onovy),  [thejoeejoee](https://github.com/thejoeejoee)

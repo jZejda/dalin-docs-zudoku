@@ -1,0 +1,74 @@
+# Úvodem
+
+Hlavní misí aplikace je **zjednodušit** život všem **orienťákům**. Dává práva a povinnosti lidem, tak aby se lidé mohli soustředit
+na to co je baví a co mají rádi. Opakující operace pak necháme strojům.
+
+:::tip
+Prosím každého kdo bude s aplikací pracovat aby pokud možno **vše co sám může vyřídit tak udělal**. Přihlášky platby, změna údajů,
+kontrola kde jsem nejsem přihlášen, sledování aktuálních informací by měla být pohodlná a **není potřeba tyto činnosti na nikoho dalšího delegovat**.
+
+**Nechme lidi dělat co je baví**.
+:::
+
+Jak aplikace **vypadá** si můžete udělat představu na tomto obrázku. Jedná se o **přehled aktuálních závodů** nabízených členům oddílu.
+
+Aplikace má spoustu jiných zajímavých stránek. Stačí je jen prozkoumat v sekci **Stránky**.
+
+![Zavod/Akce](./img/prehled-zavodu-akci.png)
+
+## Kam se podívat dále
+
+Prozkoumejte další funkce aplikace.
+
+<CardGrid columns={3}>
+  <LinkCard
+    icon="users"
+    color="purple"
+    to="/napoveda/stranka-zavody-akce"
+    title="Uživatelé"
+    description="Přihlašování na závody, správa registrací, sledování termínovek."
+  />
+  <LinkCard
+    icon="wrench"
+    color="teal"
+    to="/install/index"
+    title="Instalace a nastavení"
+    description="Jak správně aplikaci nainstalovat, nastavit a provozovat."
+  />
+  <LinkCard
+    icon="sparkles"
+    color="orange"
+    to="/changelog/index"
+    title="Novinky"
+    description="Jaké jsou novinky v aplikaci? Chci se dozvědět více."
+  />
+</CardGrid>
+
+
+## Jsem tu poprvé
+
+Pokud jsi obdržel e-mail s heslem na portál, budeš mít pravděpodobně základní [roli Člen](role-v-aplikaci). Jako **člen** se můžeš přihlašovat/odhlašovat na závody
+a různě se účastnit oddílových akcí.
+
+Po přihlášení uvidíš úvodní obrazovku se souhrnem informací. Je zde vidět stav osobního konta apod.
+
+---
+
+Doporučujeme v bodech zkontrolovat tyto stránky:
+
+1. Na stránce [Závod/Akce](stranka-zavody-akce) se podívej na aktuální akce, na které je možné se [přihlásit](jak-se-prihlasit-na-oris-zavod).
+2. Na stránce [Nastavení notifikací](stranka-uzivatelska-nastaveni) - si nastav zasílání zpráv podle preference
+3. Na stránce [Finance](stranka-finance) zkontroluj přehled transakcí.
+4. Na stránce Moje registrace zkontroluj údaje všech registrací které spravuješ.
+
+## Mohlo by se dále hodit
+
+Pokud používáš nějaký kalendář jako `Google Calendar`, `MS Office` nebo `iCloud` služby, je možné do kalendáře přidat termínovku.
+
+- kalendář závodů - `https://{domena.tld}/api/feed/kalendar/zavody/all/`
+- kalendář tréninků - `https://{domena.tld}/api/feed/kalendar/treninky/all/`
+
+:::tip{title="Návody"}
+Připravujeme návod propojení s `Google calendar`
+:::
+
