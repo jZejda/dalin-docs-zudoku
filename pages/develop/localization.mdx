@@ -1,0 +1,67 @@
+# Lokalizace CZ/EN
+
+Aplikace je plně dvojjazyčná — čeština je výchozí, angličtina volitelná. Každý text viditelný
+uživatelem musí jít přes `__()` s klíči doplněnými do **obou** jazyků (`lang/cs/` i `lang/en/`).
+Paritu klíčů hlídá test `tests/Feature/LangParityTest.php` — pokud se sady klíčů rozjedou, spadne
+celá testovací sada.
+
+## Infrastruktura přepínání jazyka
+
+Přepínač jazyka v administraci zajišťuje balíček
+[`bezhansalleh/filament-language-switch`](https://github.com/bezhanSalleh/filament-language-switch),
+konfigurovaný v `app/Providers/AppServiceProvider.php`:
+
+```php
+LanguageSwitch::configureUsing(function (LanguageSwitch $switch): void {
+    $switch
+        ->locales(['cs', 'en'])
+        ->visible(outsidePanels: true) // přepínač i na přihlašovací stránce
+        ->userPreferredLocale(fn (): ?string => auth()->user()?->locale);
+});
+```
+
+Na to navazují tři kusy aplikačního kódu:
+
+- **`App\Listeners\PersistUserLocale`** — listener na událost `LocaleChanged` (auto-discovery,
+  neregistruje se ručně). Zvolený jazyk uloží do sloupce `users.locale`, takže volba přežije
+  odhlášení.
+- **`User implements HasLocalePreference`** — odchozí e-maily se díky tomu automaticky odesílají
+  v jazyce příjemce. Nikdy nevolejte `->locale()` na mailable ručně.
+- **`App\Http\Middleware\SetLocale`** — middleware pro veřejný frontend (registrovaný v
+  `bootstrap/app.php`). Čte stejný session klíč, který zapisuje přepínač v panelu, s fallbackem
+  na `users.locale` a `config('app.locale')` — volba z administrace se tedy přenáší i na veřejné
+  stránky.
+
+## Konvence lang souborů
+
+- Jeden soubor na doménu, kebab-case: `lang/{cs,en}/sport-event.php`, `lang/{cs,en}/member-finance.php`
+- E-maily v `lang/{cs,en}/mail/<mailable-kebab>.php` se sekcemi `subject` a `body`
+- Sdílené texty v `app.php` (např. `app.navigation_groups.*`) a `filament/common.php`
+- Klíče snake_case; vnořené sekce `form` / `table` / `infolist` / `filters` /
+  `actions.<action>.{label,modal_heading,modal_description,modal_submit,notification_title,notification_body}` / `common`
+- Dynamické hodnoty přes `:placeholder` parametry, plurály přes `trans_choice()`
+
+## Pravidla pro Filament
+
+Žádné statické vlastnosti typu `$navigationLabel` — místo nich metody:
+
+- Resource: `getNavigationLabel()`, `getModelLabel()`, `getPluralModelLabel()`, `getNavigationGroup()`
+- RelationManager: `getTitle()`, `getModelLabel()`
+- Enumy: popisky přes `getLabel()` s klíči podle `EnumClass::Case->value`
+
+## Pasti
+
+- **PHPStan level 8**: `__()` uvnitř ternárního výrazu, který může vrátit `null`, neprojde analýzou —
+  přepište na `if`.
+- **Nelokalizuje se**: data ukládaná do DB (např. poznámky u kreditů), komentáře v kódu (čeština je
+  v pořádku), názvy značek, OSM atribuce.
+
+## Referenční implementace
+
+- Filament resource: `MemberFinanceResource` + `lang/{cs,en}/member-finance.php`
+- E-mail: mailable `UserCreditChange` + `lang/{cs,en}/mail/user-credit-change.php`
+
+:::tip{title="Uživatelský pohled"}
+Jak přepínač jazyka vypadá a kde ho uživatel najde, popisuje
+[nápověda k ovládání aplikace](/napoveda/ovladani-aplikace).
+:::

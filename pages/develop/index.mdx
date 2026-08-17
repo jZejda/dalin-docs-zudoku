@@ -28,17 +28,21 @@ Zároveň není problém něco konkrétně vysvětlit, co jak bylo myšleno.
 
 ## Jak je to poskládané
 
-V roli backendu je zde [Laravel](https://laravel.com/) (aktuálně ve verzi 10). Půjdeme cestou časté aktualizace. Aktuálně 
-je nejnižší verze **PHP 8.4**. Dále doporučuji MySQL databázi 8+ u nižších verzích MySQL je potřeba trochu upravit migrace.
+V roli backendu je zde [Laravel](https://laravel.com/) (aktuálně ve verzi **13**). Půjdeme cestou časté aktualizace. Aktuálně
+běží na **PHP 8.5**. Dále doporučuji MySQL databázi 8+ u nižších verzích MySQL je potřeba trochu upravit migrace.
 
-Líbilo by se mi dělat krásnou aplikaci rozdělenou na backena a frontend bohužl na toto nemám čas takže jsem šel kompromisem.
+Líbilo by se mi dělat krásnou aplikaci rozdělenou na backend a frontend, bohužel na toto nemám čas, takže jsem šel kompromisem.
 Tedy konkrétně
  - [BACKEND]- **Laravel** + **MySQL**
- - [FRONTEND]- **[Laravel LiveWire](https://laravel-livewire.com/)** 
-   - [Filamentphp v3](https://filamentphp.com/) - nástroj kde je udělaná administrace rozhranní 
-   - **[.blade](https://laravel.com/docs/10.x/blade)** - použití standardního template jazyka Blade v Laravelu pro jakoukoliv jinou stránku
-   - [Tailwind CSS](https://tailwindcss.com/) - je možné použít jakoukoliv třídu z verze **3.x**
+ - [FRONTEND]- **[Laravel Livewire](https://livewire.laravel.com/)**
+   - [Filamentphp v5](https://filamentphp.com/) - nástroj kde je udělaná administrace rozhraní
+   - **[.blade](https://laravel.com/docs/13.x/blade)** - použití standardního template jazyka Blade v Laravelu pro jakoukoliv jinou stránku
+   - [Tailwind CSS](https://tailwindcss.com/) - je možné použít jakoukoliv třídu z verze **4.x**
      - [Flowbite](https://flowbite.com/) - je možné použít komponenty z free verze
+
+:::tip{title="Detaily o vývojovém prostředí"}
+Kompletní stack a příkazy pro lokální vývoj jsou popsané v [Vývojovém prostředí](/develop/development-environment).
+:::
 
 # Chtěl bych se zeptat
 
