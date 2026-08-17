@@ -24,18 +24,25 @@ jobs:
       - name: Build Zudoku docs
         run: npm run build
 
-      - name: Fix directory/file route collisions for static hosting
-        # Zudoku writes every route as "<path>.html". Routes that have both
-        # their own content and nested sub-routes (e.g. the OpenAPI
-        # reference roots /api, /oris-api) end up as a "<path>.html" file
-        # sitting next to a same-named "<path>/" directory. Apache's shared
-        # hosting auto-redirects bare "/api" to "/api/" and then 403s
-        # because that directory has no index.html. Mirror the flat file in
-        # as the directory's index so both "/api" and "/api/" resolve.
+      - name: Mirror routes into "<path>/index.html" for static hosting
+        # Zudoku writes every route as a flat "<path>.html" file. Our
+        # nginx/Apache static host doesn't rewrite extensionless URLs to
+        # ".html" (so a hard load of e.g. /napoveda/index 404s), and for
+        # routes that also have nested sub-routes (e.g. the OpenAPI
+        # reference roots /api, /oris-api) it auto-redirects bare "/api" to
+        # "/api/" and then 403s because that directory has no index.html.
+        # Mirroring every "<path>.html" into "<path>/index.html" lets the
+        # host's own directory+index handling resolve both the bare path
+        # (via auto-redirect) and the trailing-slash path.
         run: |
           find dist -name "*.html" | while read -r f; do
+            rel="${f#dist/}"
+            case "$rel" in
+              index.html|400.html|404.html|500.html) continue ;;
+            esac
             dir="${f%.html}"
-            if [ -d "$dir" ] && [ ! -f "$dir/index.html" ]; then
+            mkdir -p "$dir"
+            if [ ! -f "$dir/index.html" ]; then
               cp "$f" "$dir/index.html"
             fi
           done

@@ -63,6 +63,10 @@ const config: ZudokuConfig = {
     },
   ],
   navigation: [
+    // Maps pages/index.mdx directly to "/" (its file-based route would
+    // otherwise be "/index"), so the client router matches the root path
+    // on hydration instead of falling through to the 404 page.
+    { type: "doc", file: "index", path: "/", display: "hide" },
     {
       type: "category",
       label: "Nápověda",
