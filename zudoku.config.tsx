@@ -320,7 +320,6 @@ const config: ZudokuConfig = {
     }),
   ],
   redirects: [
-    { from: "/", to: "/index" },
     // old VitePress section roots
     { from: "/napoveda", to: "/napoveda/index" },
     { from: "/install", to: "/install/index" },
