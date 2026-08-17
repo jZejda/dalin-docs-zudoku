@@ -5,7 +5,13 @@ info:
   description: |-
     Neoficiální OpenAPI specifikace ORIS API (informační systém Českého svazu orientačních sportů), sestavená podle oficiální dokumentace https://oris.orientacnisporty.cz/API.
 
-    API je ve skutečnosti jediný endpoint `/API/`, kde se volaná metoda určuje query parametrem `method`. Pro přehlednost je zde každá metoda uvedena jako samostatná cesta ve tvaru `/API/?method=<název>` – parametr `method` proto není deklarován samostatně, je součástí cesty. (Query string v klíči cesty je mimo striktní OpenAPI standard, dokumentační nástroje jej však běžně zobrazí správně.)
+    API je ve skutečnosti jediný endpoint `/API/`, kde se volaná metoda určuje query parametrem `method`. Pro přehlednost je zde pro každou metodu uvedena samostatná cesta ve tvaru `/API/?method=<název>` a `method` je navíc u každé operace explicitně deklarován jako povinný query parametr s pevnou hodnotou – aby ho nezapomněly přidat i nástroje, které si generují URL/kód samy.
+
+    <tip>
+
+    **Upozornění:** vkládání query stringu do klíče cesty je mimo striktní OpenAPI standard – používáme ho jen proto, aby šel jeden fyzický endpoint v dokumentaci rozdělit na přehledné logické celky podle `method`. Většina nástrojů si s tím poradí, ale automaticky generovaná ukázka kódu (cURL/Python/…) může kvůli tomu zobrazit `method` v URL dvakrát (`?method=getList?method=getList&…`). Jde čistě o kosmetickou vadu zobrazení ukázky – na skutečné volání ani na panel „Try it" to vliv nemá. Pro spolehlivou URL použijte tlačítko „kopírovat" u testovacího volání, nebo požadavek rovnou odešlete přímo z dokumentace.
+
+    </tip>
 
     **Formát odpovědi:** primárně `json`; podporovány jsou i `xml` a `xml2` (xml2 vrací stejné názvy XML nódů pro opakující se hodnoty).
 
