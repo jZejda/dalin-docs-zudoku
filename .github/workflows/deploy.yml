@@ -24,6 +24,22 @@ jobs:
       - name: Build Zudoku docs
         run: npm run build
 
+      - name: Fix directory/file route collisions for static hosting
+        # Zudoku writes every route as "<path>.html". Routes that have both
+        # their own content and nested sub-routes (e.g. the OpenAPI
+        # reference roots /api, /oris-api) end up as a "<path>.html" file
+        # sitting next to a same-named "<path>/" directory. Apache's shared
+        # hosting auto-redirects bare "/api" to "/api/" and then 403s
+        # because that directory has no index.html. Mirror the flat file in
+        # as the directory's index so both "/api" and "/api/" resolve.
+        run: |
+          find dist -name "*.html" | while read -r f; do
+            dir="${f%.html}"
+            if [ -d "$dir" ] && [ ! -f "$dir/index.html" ]; then
+              cp "$f" "$dir/index.html"
+            fi
+          done
+
       - name: Configure SSH known_hosts
         run: |
           mkdir -p ~/.ssh
