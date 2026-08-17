@@ -1,0 +1,39 @@
+name: Deploy Zudoku Dalin DOCs Site
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build Zudoku docs
+        run: npm run build
+
+      - name: Configure SSH known_hosts
+        run: |
+          mkdir -p ~/.ssh
+          printf '%s\n' "${{ secrets.SSH_KNOWN_HOSTS }}" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Deploy via rsync
+        env:
+          SSHPASS: ${{ secrets.SSH_USER_PASSWORD }}
+          SSH_USER: ${{ secrets.SSH_USER_NAME }}
+          SSH_HOST: ${{ secrets.SSH_SERVER_NAME }}
+        run: |
+          sshpass -e rsync -av -e "ssh -p 20001 -o UserKnownHostsFile=$HOME/.ssh/known_hosts" ./dist/ "$SSH_USER@$SSH_HOST:/home/html/multi_731459/dalin.cz/_sub/docs"
