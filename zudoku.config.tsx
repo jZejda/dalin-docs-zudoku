@@ -17,7 +17,7 @@ const config: ZudokuConfig = {
   site: {
     title: "DaLin",
     logo: {
-      src: { light: "/dalin-logo-light.png", dark: "/dalin-logo-dark.png" },
+      src: { light: "/dalin-logo-light.svg", dark: "/dalin-logo-dark.svg" },
       alt: "DaLin dokumentace",
       width: "110px",
     },
