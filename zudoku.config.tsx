@@ -166,6 +166,11 @@ const config: ZudokuConfig = {
                   file: "napoveda/jak-pridat-zavod",
                   label: "Přidat závod",
                 },
+                {
+                  type: "doc",
+                  file: "napoveda/definice-kategorii",
+                  label: "Definice kategorií",
+                },
               ],
             },
             {
@@ -181,6 +186,27 @@ const config: ZudokuConfig = {
                   type: "doc",
                   file: "napoveda/jak-exportovat-data-o-zavodu",
                   label: "Export dat o závodu",
+                },
+              ],
+            },
+            {
+              type: "category",
+              label: "Redaktor",
+              items: [
+                {
+                  type: "doc",
+                  file: "napoveda/sprava-novinek",
+                  label: "Novinky",
+                },
+                {
+                  type: "doc",
+                  file: "napoveda/sprava-stranek",
+                  label: "Statické stránky",
+                },
+                {
+                  type: "doc",
+                  file: "napoveda/kategorie-obsahu",
+                  label: "Kategorie obsahu",
                 },
               ],
             },
@@ -223,6 +249,22 @@ const config: ZudokuConfig = {
                   type: "doc",
                   file: "napoveda/odeslane-emaily",
                   label: "Odeslané e-maily",
+                },
+                {
+                  type: "doc",
+                  file: "napoveda/klubova-vozidla",
+                  label: "Klubová vozidla",
+                },
+              ],
+            },
+            {
+              type: "category",
+              label: "Super Admin",
+              items: [
+                {
+                  type: "doc",
+                  file: "napoveda/kluby",
+                  label: "Kluby",
                 },
               ],
             },
