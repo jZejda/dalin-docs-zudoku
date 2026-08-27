@@ -24,6 +24,10 @@ Ve sbalitelné sekci **Dodatečné informace** je možné doplnit *editorial* �
 
 U existující novinky lze z nabídky akcí (ikona tří teček) spustit **Poslat novinkovou zprávu** — rozešle obsah novinky e-mailem. U rozesílky se vybírá, jestli má jít jen uživatelům, kteří mají o novinky zájem, nebo úplně všem. Tuto akci vidí jen **Super Administrátor** a **Redaktor**.
 
+## Vytvoření novinky přes API
+
+Novinky lze zakládat a upravovat i strojově přes veřejné [API](/api) — endpointy `POST /api/v1/post` a `PUT /api/v1/post/{post}`. Požadavek se autentizuje hlavičkou `x-apikey` (viz [API klíč](/napoveda/stranka-uzivatelska-nastaveni#api-klíč-nově-od-verze-12)). Přístup mají role **Redaktor**, **Administrátor** a **Správce závodů**.
+
 :::info{title="Kdo má přístup"}
 Zakládat a upravovat novinky může role **Redaktor** (případně Super Administrátor). Viz [Role v aplikaci](/napoveda/role-v-aplikaci).
 :::
