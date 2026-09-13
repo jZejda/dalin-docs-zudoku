@@ -112,7 +112,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Závody / události",
           icon: "calendar",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             {
               type: "doc",
@@ -150,7 +151,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Registrace",
           icon: "users-round",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             {
               type: "doc",
@@ -176,7 +178,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Tržiště",
           icon: "shopping-bag",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             { type: "doc", file: "napoveda/trziste", label: "Tržiště", icon: "shopping-bag" },
           ],
@@ -185,7 +188,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Uživatel",
           icon: "user",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             {
               type: "category",
@@ -250,7 +254,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Správa financí",
           icon: "wallet",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             {
               type: "doc",
@@ -276,7 +281,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Obsah",
           icon: "folder-open",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             { type: "doc", file: "napoveda/sprava-novinek", label: "Novinky", icon: "newspaper" },
             {
@@ -297,7 +303,8 @@ const config: ZudokuConfig = {
           type: "category",
           label: "Nastavení",
           icon: "settings",
-          collapsible: false,
+          collapsible: true,
+          collapsed: true,
           items: [
             {
               type: "doc",
