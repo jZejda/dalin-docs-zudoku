@@ -12,6 +12,10 @@ const config: ZudokuConfig = {
     apis: {
       // Show the Authentification section in specifications in the API Playground
       disableSecurity: false,
+      // Let visitors download the OpenAPI schema file straight from the API reference.
+      schemaDownload: {
+        enabled: true,
+      },
     }
   },
   site: {
@@ -409,6 +413,11 @@ const config: ZudokuConfig = {
       label: "O projektu",
       items: [
         { type: "doc", file: "develop/index", label: "Úvod" },
+        {
+          type: "doc",
+          file: "develop/jak-pomoci-projektu",
+          label: "Jak pomoci projektu",
+        },
         {
           type: "doc",
           file: "develop/development-environment",

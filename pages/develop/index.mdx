@@ -1,51 +1,38 @@
-# Jak pomoci projektu
+# O projektu
 
-Pokud se chceš aktivně zapojit do vývoje stránek, jsi na správné adrese. Pomoci je možné několika způsoby.
+**DaLin** je klubový informační systém pro orientační sporty — spravuje závody, přihlášky, registrace, finance
+a obsah webu jednoho oddílu. Propojuje se s českým **[ORIS](https://oris.orientacnisporty.cz/)** API, díky čemuž
+umí automaticky zakládat a aktualizovat závody, stahovat platby z banky a párovat je s členy.
 
-1. **Stránky používám a chtěl bych na nich něco změnit**. Je tam nelogičnost, špatně se to ovládá. V takovém případě 
-je super napsat co je špatně a třeba o tom i podiskutovat jestli by se to dalo udělat lépe.
+Backend běží na **[Laravel](https://laravel.com/)** (PHP), administrační rozhraní staví na
+**[FilamentPHP](https://filamentphp.com/)** s **Livewire** a **Tailwind CSS**. Podrobný technický přehled je v
+sekci [Jak pomoci projektu](/develop/jak-pomoci-projektu) a [Vývojové prostředí](/develop/development-environment).
 
-2. **Chtěl bych se podílet na nových vlastnostech**. Aktivně přemýšlím o tom co by se mohlo dále rozvíjet. Chápu danou problematiku
-a dokážu popsat chování nové funkce. Takový malý produktová manager. Ukoly pak naplánovat a případně prioritizovat co by se mělo udělat dříve a co později.
+## Vývoj v čase
 
-3. **Chtěl bych nové věci testovat**. Připravuje se nová verze systému a bude potřeba jí pořádně otestovat.
-4. **Chtěl bych psát a upravovat tuto dokumentaci**.
-5. **Chtěl bych přímo přispívat v projektu jako programátor**. Není žádný problém. Kód je verzovaný, spolupráci se meze nekladou.
+<Stepper>
 
-Diskutovat nad věcmi můžeme společně na skupinovém chatu Discord. viz dále.
+1. **Verze 10** <Badge type="info" text="2023" />
 
-:::tip{title="Diskuse"}
-Již delší dobu je na **Discord**-u založena místnost abychom se nemuseli případně opakovat. Chceš se podělit s nápadem, dotazem apod., jsi
-vítán pod [tímto odkazem](https://discord.gg/tVGRPXPF). **Discord** běží i v prohlížeči stačí se [zaregistrovat](https://discord.com/register) a skrze pozvánku přihlásit do naší skupiny.
-:::
+   Základ systému — napojení na ORIS s pravidelnou aktualizací závodů, automatické stahování bankovních plateb
+   a jejich párování s členy, první verze klubové administrace.
 
-### Pokud chci pomoci projektu:
+1. **Verze 11** <Badge type="info" text="2024–2025" />
 
-Jaké jsou požadavky pro člověka na vývoj? Znalost **PHP**, frameworku **Laravel** nebo Symfony, **JavaScript** plus okrajově **Vue.js**. Nově ještě
-**Livewire** v kombinaci s **alpine.js**, které používa knihovna FilamentPHP.
-Co je ale nejdůležitější, _chuť něco dělat případně se naučit_. Existuje spoustu kvalitních návodů, popisů nebo dokumentace.
-Zároveň není problém něco konkrétně vysvětlit, co jak bylo myšleno.
+   Přechod na **Laravel 11** a **PHP 8.4**. Přibylo delegované přihlašování na závody (přihlašuj i za jiné členy),
+   konektor na **Fio banku**, správa klubových vozidel a mapa nadcházejících akcí.
 
-## Jak je to poskládané
+1. **Verze 12** <Badge type="info" text="leden–červenec 2026" />
 
-V roli backendu je zde [Laravel](https://laravel.com/) (aktuálně ve verzi **13**). Půjdeme cestou časté aktualizace. Aktuálně
-běží na **PHP 8.5**. Dále doporučuji MySQL databázi 8+ u nižších verzích MySQL je potřeba trochu upravit migrace.
+   Přechod na **Laravel 12**, **FilamentPHP v5** a **Tailwind CSS 4**. Export přihlášek do formátu ČSOS, veřejné
+   API pro stránky a novinky, vizuální **TipTap** editor obsahu, správa vlastního API klíče.
 
-Líbilo by se mi dělat krásnou aplikaci rozdělenou na backend a frontend, bohužel na toto nemám čas, takže jsem šel kompromisem.
-Tedy konkrétně
- - [BACKEND]- **Laravel** + **MySQL**
- - [FRONTEND]- **[Laravel Livewire](https://livewire.laravel.com/)**
-   - [Filamentphp v5](https://filamentphp.com/) - nástroj kde je udělaná administrace rozhraní
-   - **[.blade](https://laravel.com/docs/13.x/blade)** - použití standardního template jazyka Blade v Laravelu pro jakoukoliv jinou stránku
-   - [Tailwind CSS](https://tailwindcss.com/) - je možné použít jakoukoliv třídu z verze **4.x**
-     - [Flowbite](https://flowbite.com/) - je možné použít komponenty z free verze
+1. **Verze 13** <Badge type="info" text="červenec 2026 – dosud" /> 🚀
 
-:::tip{title="Detaily o vývojovém prostředí"}
-Kompletní stack a příkazy pro lokální vývoj jsou popsané v [Vývojovém prostředí](/develop/development-environment).
-:::
+   Přechod na **Laravel 13** a **PHP 8.5**. Nové volitelné moduly **Tržiště** a **Napojení na banku**, plná
+   **CZ/EN lokalizace**, mapové ikony podle sportu a nakonec kompaktní redesign celé administrace i
+   reorganizace menu.
 
-# Chtěl bych se zeptat
+</Stepper>
 
-Je tu [Discord](https://discord.gg/BcrhnNSaG5) pro nápady, dotazy apod.
-
-Případně je možné napsat na e-mail: dalin@jirizejda.cz, ozveme se nazpět.
+Úplný, verzi po verzi rozepsaný přehled změn je v [Changelogu](/changelog/index).
