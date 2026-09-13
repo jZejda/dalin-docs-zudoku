@@ -1,0 +1,35 @@
+name: CI (build check)
+
+# Build-only — does NOT deploy. Webglobe's shared hosting firewall doesn't
+# allow SSH from GitHub-hosted runner IPs (port 20001 is unreachable from
+# here), so deployment runs locally instead: `make deploy` (see Makefile /
+# CLAUDE.md). This job just catches broken builds (MDX/config errors) before
+# they reach main.
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '22'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Typecheck
+        run: npm run typecheck
+
+      - name: Build Zudoku docs
+        run: npm run build

@@ -7,8 +7,9 @@ Guidance for Claude Code when working in this repository.
 Documentation site for **DaLin** — a club information system for managing
 orienteering sports clubs (https://github.com/jZejda/dalin). Built with
 [Zudoku](https://zudoku.dev) (a React/Vite-based documentation framework).
-The content was migrated from a VitePress site; the API reference is hosted
-externally on Scalar and only linked from the navigation.
+The content was migrated from a VitePress site. The API reference (`/api`,
+`/oris-api`) is rendered natively by Zudoku from the OpenAPI files in `apis/`
+(see `apis` in `zudoku.config.tsx`) — not hosted externally.
 
 ## Structure
 
@@ -34,6 +35,23 @@ npm run typecheck  # tsc --noEmit (type errors only)
 Requires Node ≥ 20.19 — run `nvm use 23.4.0` first (installed versions:
 20.20.1, 23.4.0). Note: `npm run lint`/`check` are currently broken — there is
 no ESLint config in the repo; use `npm run typecheck` after editing `.ts`/`.tsx`.
+
+## Deployment
+
+```bash
+make deploy          # build + mirror routes + rsync --delete to production
+make deploy-dry-run   # same, but rsync --dry-run — shows the diff, changes nothing
+```
+
+Deploys **locally only** — Webglobe's shared-hosting firewall doesn't allow SSH
+from GitHub-hosted runner IPs (port 20001 unreachable), so `.github/workflows/ci.yml`
+only builds/typechecks on push, it never deploys. Needs a working SSH key for
+`ssh-731459@dw303.webglobe.com:20001` (same hosting account as the DaLin app itself —
+see `docs/deployment.md` in the `dalin` repo). Target path:
+`/home/html/multi_731459/dalin.cz/_sub/docs`. The old CI deploy used
+`SSH_USER_PASSWORD`/`SSH_USER_NAME`/`SSH_SERVER_NAME`/`SSH_KNOWN_HOSTS` repo
+secrets over `sshpass` — those are unused now and can be deleted from the repo's
+Actions secrets.
 
 ## Conventions
 
