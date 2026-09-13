@@ -80,6 +80,11 @@ const config: ZudokuConfig = {
             { type: "doc", file: "napoveda/index", label: "Jsem tu nový" },
             {
               type: "doc",
+              file: "napoveda/prechod-na-v13",
+              label: "Přechod na verzi 13",
+            },
+            {
+              type: "doc",
               file: "napoveda/usnadneni-procesu",
               label: "Usnadnění procesů",
             },
@@ -94,7 +99,7 @@ const config: ZudokuConfig = {
             {
               type: "doc",
               file: "napoveda/stranka-zavody-akce",
-              label: "Závod/Akce",
+              label: "Závody / události",
             },
             {
               type: "doc",
@@ -170,6 +175,11 @@ const config: ZudokuConfig = {
                   type: "doc",
                   file: "napoveda/definice-kategorii",
                   label: "Definice kategorií",
+                },
+                {
+                  type: "doc",
+                  file: "napoveda/mapove-ikony",
+                  label: "Ikony v mapě",
                 },
               ],
             },
@@ -293,7 +303,8 @@ const config: ZudokuConfig = {
       type: "category",
       label: "Novinky",
       items: [
-        { type: "doc", file: "changelog/index", label: "Verze 12.x" },
+        { type: "doc", file: "changelog/index", label: "Verze 13.x" },
+        { type: "doc", file: "changelog/v12", label: "Verze 12.x" },
         { type: "doc", file: "changelog/v11", label: "Verze 11.x" },
         { type: "doc", file: "changelog/v10", label: "Verze 10.x" },
         {

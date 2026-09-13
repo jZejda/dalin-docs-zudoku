@@ -8,42 +8,51 @@ jedné stránce, bude se chovat obdobně i na ostatních.
 Pokud byste našli jakoukoliv chybu prosím ozvěte se mi na.
 :::
 
-## Horní panel
+## Postranní menu
 
-Horní panel je dostupný na všech stránkách. V horním panelu najdete z leva do prava:
+Aplikace už nemá horní lištu — dřívější horní panel s vyhledáváním, zvonkem a rozbalovacím menu
+uživatele byl zrušen a všechno se přesunulo do **levého postranního menu**.
 
-![System navBar](./system-navbar.png)
+![Hlavní menu aplikace](./img/system-hlavni-menu.png)
 
-- **tlačítko zmenšující/zvětšující levý sloupec (1)** menu (vhodné u monitorů s menší šířkou pro tablety telefony)
- - **hledat (2)** dialog, hledá globálně v celém systému ale jen věci které správce určil že mají být zařazeny do výsledků hledání.
-- **ikona zvonku (3)** - zobrazuje/skrývá výsuvné pravé menu kde se zobrazují notifikace
-- **rozvírací ikona menu (4)** Obsahuje iniciály přihlášeného uživatele
-    - toggle na zapnutí/vypnutí dárk módu
-    - tlačítko na odhlášení ze systému
+V menu shora dolů najdete:
+
+- **hlavní stránky bez nadpisu skupiny** — Můj přehled, Závody / události (s počtem u odznaku),
+  Registrace a Tržiště (pokud je tento volitelný modul ve vašem klubu zapnutý)
+- **skupinu Uživatel** — Přihlášky, Můj kredit a Ostatní (zde je mimo jiné
+  [Můj profil](/napoveda/stranka-uzivatelska-nastaveni#můj-profil-a-avatar) s nastavením avataru)
+- **skupinu Správa financí** — vidí jen finančníci a admin klubu
+- podle přidělených práv dál i skupinu **Obsah** a úplně dole skupinu **Nastavení** (viz níže)
+- **Zobrazit notifikace** — otevírá výsuvný panel s notifikacemi; jsou personalizované podle role
+  uživatele a zůstávají uložené, dokud je sami neodstraníte křížkem nebo odkazem **Odstranit**
+- úplně dole **jméno přihlášeného uživatele** s barevným odznakem (badge) — kliknutím se rozbalí menu
+  s odkazem na **Můj přehled**, **Nastavení** a tlačítkem pro **odhlášení**
+
+:::info
+Globální vyhledávání napříč aplikací bylo zrušeno. Konkrétní stránku najdete procházením menu podle
+skupin výše.
+:::
 
 :::tip{title="Přepínač jazyka"}
-Aplikace nově podporuje kromě češtiny i angličtinu. Přepínač jazyka (CZ/EN) najdete v horním panelu
+Aplikace nově podporuje kromě češtiny i angličtinu. Přepínač jazyka (CZ/EN) najdete v hlavičce menu
 a také na přihlašovací stránce. Jazyk, který zvolíte, se uloží k vašemu účtu a použije se i pro
 odchozí e-maily.
 :::
 
-## Levý panel
+## Nastavení
 
-![System navBar](./system-left-menuwebp.webp)
+Skupina **Nastavení** je úplně dole v hlavním menu a sdružuje veškerou administraci systému — dřív
+byly tyto stránky rozeseté po různých částech menu. Kromě odkazu ve skupině ji najdete i v menu
+uživatele dole (viz výše).
 
-V levém panelu vidí uživatel dostupné stránky. V základu by měl vidět hlavní stránku
-plus správu vlastního profilu.
+![Rozbalená skupina Nastavení](./img/nastaveni-kluby.png)
 
-Podle práv jaké mu jsou přidány pak může spravovat i další sekce systému.
+V clusteru Nastavení jsou k dispozici (podle rolí uživatele):
 
-### Pravý výsuvný panel notifikace
-
-![System navBar](./system-notification-drawer.webp)
-
-Pravý panel se skrývá/zobrazuje kliknutím na ikonu zvonku v záklaví stránky. Notifikace
-jsou personalizovány, závislé na tom do jaké role je uživatel zařazen. Notifikace jsou 
-uchovány v databázi do doby než je uživatel sám nesmaže odkazem křížku nebo odkazem
-**Odstranit**.
+- **Uživatelé**, **Nastavení**, **Nastavení klubu**, **Bankovní napojení**, **Ikony v mapě**,
+  **Klubová vozidla**, **Odeslané e-maily**
+- podskupina **Filament Shield** → **Role**
+- podskupina **Nastavení závodů** → **Kluby**, **Výstupy pro pořádání**, **Definice kategorií**
 
 ## Ovládání tabulkových výpisů
 

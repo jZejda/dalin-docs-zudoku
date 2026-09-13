@@ -66,8 +66,9 @@ Popisky, ikony a barvy jsou definovány přímo v enumech a čtou se z `lang/cs/
 | Moje nabídky | `App\Filament\Pages\MyMarketOfferList` | `CreateAction`/`EditAction` se `slideOver()` a `Repeater` produktů; cena a způsob úhrady se disablují, pokud `$product->orders()->exists()`; položky repeateru nejdou smazat za stejné podmínky |
 | Moje objednávky | `App\Filament\Pages\MyMarketOrderList` | přehled objednávek přihlášeného uživatele se snapshot cenou, filtrem podle stavu a akcí zrušení |
 
-Všechny tři stránky mají `getNavigationGroup()` vracející `__('marketplace.navigation_group')` (**„Tržiště“**) a
-`canAccess()` vyžadující přihlášeného uživatele a `AppSetting::isMarketplaceModuleEnabled()`.
+`MarketplaceList` je samostatná top-level stránka v menu (bez nadpisu skupiny), `MyMarketOfferList` a
+`MyMarketOrderList` patří pod cluster `App\Filament\Clusters\Other\OtherCluster` (skupina „Ostatní“).
+Všechny tři mají `canAccess()` vyžadující přihlášeného uživatele a `AppSetting::isMarketplaceModuleEnabled()`.
 
 ### Autorizační pravidla v `MyMarketOfferList`
 
