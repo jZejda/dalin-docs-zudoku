@@ -1,0 +1,71 @@
+# Doprava na závody
+
+Modul **Doprava** pomáhá členům domluvit spolujízdu na závody a akce. Řidič vystaví nabídku
+s volnými místy, ostatní si o místo požádají a řidič žádost schválí nebo zamítne.
+
+:::info
+Modul musí být zapnutý v [Nastavení](/napoveda/nastaveni-aplikace). Jinak se záložka Doprava,
+sloupec s volnými místy ani pole Typ dopravy u závodu nezobrazují.
+:::
+
+## Kde doprava najdete
+
+- V **přehledu závodů** je sloupec **Dopr.** s ikonou auta a číslem. Zelené číslo je počet volných míst
+  ve všech aktivních nabídkách, šedá **0** znamená, že nabídky existují, ale jsou plné. U závodu bez
+  aktivní nabídky se ikona nezobrazuje vůbec. Sloupec lze skrýt v přepínači sloupců tabulky.
+- V **detailu závodu** je záložka **Doprava**. Zelený odznak u jejího názvu ukazuje celkový počet
+  volných míst. Mění se hned po každé schválené nebo zrušené žádosti bez obnovení stránky
+  a při nule zmizí.
+
+## Typ dopravy u závodu
+
+Typ dopravy nastavuje správce závodů ve formuláři úpravy závodu, v sekci **Ostatní parametry**
+hned pod polem **Region**. Pole je vidět jen při zapnutém modulu Doprava, výchozí hodnota je
+**Vlastní doprava**.
+
+- **Doprava zajištěna klubem** — nabídku smí vystavit jen Super Administrátor, Admin klubu,
+  Správce závodů a Organizátor závodů
+- **Kombinovaná (klub + vlastní)** — nabídky mohou vystavovat i členové s vlastním autem
+- **Vlastní doprava** — nabídky vystavují členové s vlastním autem
+- **Bez dopravy**
+
+## Jak nabídnout dopravu (řidič)
+
+1. Otevřete detail závodu a záložku **Doprava**.
+2. Klikněte na **Nabídnout dopravu**.
+3. Vyberte vozidlo, odkud jedete, směr (*Jen tam*, *Jen zpět*, *Tam i zpět*), počet nabízených míst
+   a volitelně příspěvek v Kč.
+4. Uložte. Nabídku můžete později upravit nebo smazat. Smazání nabídky informuje spolujezdce e-mailem.
+
+:::info{title="Klubová vozidla"}
+Vedle vlastních vozidel z části **Moje vozidla** lze v nabídce použít i klubové vozidlo (v seznamu
+s předponou **[Klub]**). Smí to jen Super Administrátor, Admin klubu, Správce závodů a Organizátor
+závodů, a to jen u závodů s typem dopravy **Doprava zajištěna klubem** nebo **Kombinovaná**.
+Klubová vozidla se spravují v [Klubových vozidlech](/napoveda/klubova-vozidla).
+:::
+
+## Jak požádat o místo (spolujezdec)
+
+O místo v nabídce může požádat kdokoli, včetně role Člen.
+
+1. V tabulce nabídek klikněte u vybrané nabídky na **Obsadit místo**.
+2. Zvolte směr a počet míst.
+3. Do pole **Poznámka** můžete napsat, co se hodí řidiči vědět (kolik máte zavazadel, kde vás může
+   vyzvednout). Poznámka může mít nejvýše 1000 znaků.
+4. Odešlete. Řidič dostane e-mail s vaší poznámkou a tlačítky **Schválit žádost** a **Zamítnout žádost**.
+
+Stav žádosti sledujete v tabulce **Moje žádosti o spolujízdu**: *Čeká na schválení*, *Schváleno*,
+*Zamítnuto* nebo *Zrušeno*. Žádost ve stavu *Čeká na schválení* nebo *Schváleno* můžete tlačítkem
+**Zrušit žádost** stáhnout. Po potvrzení v otevřeném okně se řidič dozví o zrušení e-mailem
+a místo se uvolní pro ostatní.
+
+## Jak vyřídit žádosti (řidič)
+
+Tabulka **Žádosti o místa v mých nabídkách** ukazuje žadatele, parametry cesty (směr, počet míst,
+vozidlo), jeho poznámku a stav žádosti. Žádosti čekající na schválení vyřídíte tlačítky **Schválit**
+a **Zamítnout**, případně přímo z e-mailu. Pokud už není dost volných míst, žádost se zamítne
+a zobrazí se upozornění.
+
+:::tip
+Obě tabulky žádostí se zobrazí, až když v nich něco je.
+:::

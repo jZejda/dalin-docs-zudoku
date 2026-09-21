@@ -1,5 +1,24 @@
 # Novinky v aktuální verzi
 
+## Verze 13.3 <Badge type="info" text="09.2026" />
+
+### ✨ Nové funkce
+
+- **Mapy.cz jako podklad map** — mapy závodů i výběr GPS pozice mohou používat Mapy.cz s možností přepnout na OpenStreetMap. Zapíná se v Nastavení po zadání API klíče. Více v [nápovědě](/napoveda/nastaveni-aplikace).
+- **Poznámka ke spolujízdě** — při žádosti o místo v autě lze řidiči napsat poznámku (zavazadla, místo vyzvednutí). Řidič ji vidí v tabulce žádostí i v e-mailu.
+- **Volná místa v dopravě** — přehled závodů má nový sloupec s počtem volných míst a záložka Doprava u závodu zelený odznak. Více v [nápovědě](/napoveda/doprava-na-zavody).
+
+### 🔧 Vylepšení
+
+- **Přehlednější tabulky žádostí o dopravu** — žádosti mají u řidiče i spolujezdce vlastní tabulku s parametry cesty a stavem. Změny se projeví ihned bez obnovení stránky.
+- **Organizátor závodů může nabízet klubovou dopravu** u závodů s typem dopravy „Doprava zajištěna klubem“.
+- **Termínové odznaky u přihlášek** — v přehledu přihlášek závodu je vidět „1./2./3. termín“ nebo „Po termínu“ a přesný čas přihlášení.
+- **Odkaz na vyúčtování** v seznamu plateb se zobrazuje jen oprávněným uživatelům a jen u závodníků s platbou.
+
+### 🪲 Opravy
+
+- **Veřejné API** — nepřihlášené požadavky na koncové body s parametrem modelu (např. `/api/v1/sport-event/{id}`) nově vrací správně 401/403 místo 404.
+
 ## Verze 13.2.0 <Badge type="info" text="13.09.2026" />
 
 ### ✨ Nové funkce

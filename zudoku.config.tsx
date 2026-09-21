@@ -133,6 +133,12 @@ const config: ZudokuConfig = {
             },
             {
               type: "doc",
+              file: "napoveda/doprava-na-zavody",
+              label: "Doprava na závody",
+              icon: "car",
+            },
+            {
+              type: "doc",
               file: "napoveda/jak-pridat-zavod",
               label: "Přidat závod z ORISu",
               icon: "download",
