@@ -8,13 +8,18 @@ Redaktor spravuje **novinky** v administraci — krátké aktuální zprávy, kt
 
 1. V menu **Obsah → Novinky** klikni na **Vytvořit**.
 2. Vyplň **Nadpis** a **Obsah novinky** (Markdown editor s formátovací lištou).
-3. Přepínačem **Interní novinka** urči viditelnost:
+3. Nahraj **Titulní obrázek** — zobrazí se na kartě novinky na úvodní stránce a v záhlaví detailu novinky. Obrázek se ořízne na široký formát 7 : 2 (střed zůstává), hlavní motiv proto umísti doprostřed; výřez lze doladit přímo v editoru po nahrání. Podporované formáty JPG, PNG nebo WebP, max. 8 MB. Bez nahraného obrázku se zobrazí výchozí zástupný obrázek.
+4. Přepínačem **Interní novinka** urči viditelnost:
    - zapnuto → novinka je vidět jen přihlášeným uživatelům v administraci,
    - vypnuto → novinka je veřejná a objeví se i na úvodní stránce webu.
-4. Vyber **Autora** (přednastaven je aktuálně přihlášený uživatel).
-5. **Formát** obsahu je aktuálně vždy Markdown.
+5. Vyber **Autora** (přednastaven je aktuálně přihlášený uživatel).
+6. **Formát** obsahu je aktuálně vždy Markdown.
 
 ![Vytvoření novinky](./img/novinky-vytvorit.png)
+
+:::info{title="Starší novinky bez obrázku"}
+U novinek přenesených ze starého webu (před rokem 2022) odkazoval obrázek na soubor, který se při migraci nedochoval — appka takový odkaz nově ignoruje a zobrazí zástupný obrázek. Chceš-li u takové novinky obrázek zobrazit, nahraj nový přes pole **Titulní obrázek**.
+:::
 
 :::tip{title="Dodatečné informace"}
 Ve sbalitelné sekci **Dodatečné informace** je možné doplnit *editorial* — kratší souhrn novinky, který se zobrazí až po rozkliknutí.
