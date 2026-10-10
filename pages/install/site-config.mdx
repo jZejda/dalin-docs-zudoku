@@ -164,4 +164,9 @@ day_in_week - dny v týdnu, kdy se má uloha spouštět ['0', '1', '5'] 0 = ned�
 - **mail_monthly_user_debit_report** - report uživatelů, kteří mají záporný stav uživatelského konta, e-mail chodí na roli Finančník
 - **mail_weekly_user_event_summary** - měsíční souhrn nadcházejících akcí, chodí na uživatele, kteří mají tento report zapnut
 - **mail_entry_ends_to_pay** - e-mail na finančníka v hodinu kdy byl ukončen pro zaplacení startovného
+- **mail_pre_race_summary** - souhrn před závodem pro přihlášené závodníky. Hodinu odeslání si volí uživatel, proto ponechte `hours => ['*']`.
+
+:::info{title="Notifikace závislé na hodině"}
+Souhrn novinek a upozornění na konec přihlášek spouští plánovač (`schedule:run`) jednou za hodinu; každý uživatel dostane e-mail v hodině, kterou má nastavenou. Plánovač proto musí být volán alespoň hodinově. Více v [dokumentaci pro vývojáře](/develop/notifikacni-emaily).
+:::
 

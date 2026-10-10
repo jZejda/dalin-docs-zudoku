@@ -1,0 +1,41 @@
+# Notifikační e-maily
+
+Stránka popisuje e-maily, které si uživatel zapíná v **Uživatelských nastaveních** (záložka E-mailové nastavení), a jak se odesílají. Vzhled e-mailů popisuje [E-maily (klubový vzhled)](/develop/mail-layout).
+
+## Přehled
+
+| E-mail | Klíče v `options` | Třída | Spouštěč |
+|---|---|---|---|
+| Souhrn novinek | `news`, `news_time_trigger` | `SendNewPostsEmailJob` | plánovač `hourly()` |
+| Konec přihlášek | `sport`, `days_before_event_entry_ends`, `sport_time_trigger` | `SendSportEventEntryEndingEmailJob` | plánovač `hourly()` |
+| Týdenní přehled | `week_report_by_sport` | `ReportEmailEventWeeklyEndsBySport` | cron `mail_weekly_user_event_summary` (neděle 08:00) |
+| Souhrn před závodem | `pre_race_summary_enabled`, `pre_race_summary_days_before`, `pre_race_summary_time_trigger` | `ReportEmailPreRaceSummary` | cron `mail_pre_race_summary` |
+
+:::info{title="news_time_trigger nemá pole ve formuláři"}
+Klíč `news_time_trigger` v `options` existuje, ale formulář pro něj nemá žádné pole. Výchozí hodina je 17 (`DEFAULT_TRIGGER_EVENT` ve stránce `UserMailNotification`); jiná hodina může být uložena jen ze starší verze formuláře.
+:::
+
+## Nastavení uživatele
+
+Tabulka `user_settings` má na uživatele **více řádků** (`mail`, `event_filters`, `usersAllowSignForRace`, …). Mailové volby proto čtěte jen přes `User::mailSetting()` (relace zúžená na `type = 'mail'`, konstanta `UserSetting::TYPE_MAIL`) a `User::getMailOptions()`. Nefiltrovaná `hasOne` vracela libovolný řádek, kvůli čemuž souhrn před závodem nechodil a týdenní přehled dostávali jen někteří.
+
+## Hodina odeslání
+
+Hodina se ukládá jako `int`, ale starší řádky mohou obsahovat řetězec se nulou ("08"). Porovnávejte proto v PHP přes `(int)`, nikdy proti formátu `H` v SQL – jinak hodiny 0–9 nikdy nesedí.
+
+## Souhrn novinek
+
+- Okno je `[startOfHour − 24 h, startOfHour)`, takže každý příspěvek spadne do právě jednoho souhrnu.
+- Odesílá se nejvýše jednou denně na uživatele: `Cache::add('mail:new-posts:{user}:{Y-m-d}')`, TTL 2 dny.
+
+## Idempotence
+
+Adresa cronu může být v dané hodině zavolána vícekrát, proto se odeslání hlídá přes `Cache::add()`. Souhrn před závodem používá klíč `mail:pre-race-summary:{event}:{user}:{Y-m-d}`. Neaktivní uživatelé (`active = 0`) se přeskakují u novinek, konce přihlášek i souhrnu před závodem.
+
+## Týdenní přehled
+
+Posílá se každému aktivnímu uživateli, který má v `week_report_by_sport` alespoň jeden sport (dřív musel být první sport s ID 1).
+
+## Testy
+
+`tests/Feature/Cron/NotificationMailsCronTest.php`.

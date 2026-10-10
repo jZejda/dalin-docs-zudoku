@@ -446,6 +446,11 @@ const config: ZudokuConfig = {
         },
         {
           type: "doc",
+          file: "develop/notifikacni-emaily",
+          label: "Notifikační e-maily",
+        },
+        {
+          type: "doc",
           file: "develop/marketplace-module",
           label: "Modul Tržiště",
         },
