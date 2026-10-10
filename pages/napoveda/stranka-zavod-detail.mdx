@@ -38,7 +38,8 @@ Počínaje rolí Člen mají tito uživatelé možnost se [přihlásit na závod
  - **poslat informační e-mail** přihlášeným uživatelům
  - **exportovat** seznam přihlášených do *.xlsx sešitu
 
+## Veřejná stránka závodu a vyhledávače
 
+Veřejná stránka závodu (`/akce/{id}`) má automaticky sestavený popis pro vyhledávače a sociální sítě: typ akce, datum, místo, disciplínu a pořadatele. U akcí typu **Závod** se navíc předávají vyhledávačům strukturovaná data o události; tréninky, soustředění a mistrovství klubu je nedostávají, protože nejsou veřejnými soutěžemi.
 
-
-
+Veřejná startovka a výsledky se zobrazují jen tehdy, když existují. Pokud chybí, adresa vrátí standardní chybu 404 (stránka nenalezena).

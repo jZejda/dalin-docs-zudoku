@@ -436,6 +436,11 @@ const config: ZudokuConfig = {
         },
         {
           type: "doc",
+          file: "develop/seo",
+          label: "SEO",
+        },
+        {
+          type: "doc",
           file: "develop/marketplace-module",
           label: "Modul Tržiště",
         },

@@ -1,5 +1,23 @@
 # Novinky v aktuální verzi
 
+## Verze 13.4.0 <Badge type="info" text="10.2026" />
+
+### ✨ Nové funkce
+
+- **SEO veřejného webu** — nová sekce **Veřejný web a sociální sítě** v Nastavení klubu (popis klubu, obrázek pro sdílení 1200 × 630 px, logo, profily na sociálních sítích) zlepšuje vzhled klubu ve vyhledávačích a v náhledech odkazů. Více v [nápovědě](/napoveda/nastaveni-klubu).
+- **Titulek a popis pro vyhledávače** — novinky i stránky mají sekci **Vyhledávače a sociální sítě** s ručním titulkem a popisem; prázdné hodnoty se dopočítají. Starou sekci Meta u stránek nahrazuje. Více v [novinkách](/napoveda/sprava-novinek) a [stránkách](/napoveda/sprava-stranek).
+
+### 🔧 Vylepšení
+
+- **Adresy novinek se slugem** — novinky mají adresu `/novinka/{id}-{slug}`, staré odkazy se trvale přesměrují.
+- **Popisy závodů pro vyhledávače** — veřejná stránka závodu má automatický popis a u závodů strukturovaná data pro Google. Více v [nápovědě](/napoveda/stranka-zavod-detail).
+- **Technické** — `robots.txt` a `sitemap.xml`, popis v [dokumentaci SEO](/develop/seo).
+
+### 🪲 Opravy
+
+- Veřejná startovka a výsledky nově vrací správnou chybu 404, pokud neexistují.
+- **API a MCP** — pole `meta` u stránek nově obsahuje jen SEO titulek a popis (`title`, `description`); klíče `keywords` apod. zmizely.
+
 ## Verze 13.3.1 <Badge type="info" text="09.2026" />
 
 ### 🔒 Bezpečnost

@@ -28,3 +28,14 @@ To jsou hlavní výhody hostingu.
 :::tip{title="Standardní hosting"}
 Projekt ale lze rozjet kdekoli, kde mají vhodnou verzi PHP a MySQL serveru. 
 :::
+
+## Nasazení SEO veřejného webu
+
+Při přechodu na verzi se SEO veřejného webu (`ralphjsmit/laravel-seo`) proveďte po nasazení kódu tyto kroky:
+
+1. Spusťte migrace: `php artisan migrate` (přenese titulek a popis stránek z původního sloupce `meta` do tabulky `seo`).
+2. Přegenerujte obrázky pro sdílení: `php artisan media-library:regenerate --only=og`.
+3. V administraci otevřete **Nastavení → Nastavení klubu** a vyplňte sekci **Veřejný web a sociální sítě** (popis klubu, obrázek pro sdílení 1200 × 630 px, logo, profily). Nutné zejména na instancích abm a pbm. Viz [Nastavení klubu](/napoveda/nastaveni-klubu).
+
+Technický popis najdete v [dokumentaci SEO](/develop/seo).
+

@@ -8,7 +8,7 @@ Redaktor spravuje **novinky** v administraci — krátké aktuální zprávy, kt
 
 1. V menu **Obsah → Novinky** klikni na **Vytvořit**.
 2. Vyplň **Nadpis** a **Obsah novinky** (Markdown editor s formátovací lištou).
-3. Nahraj **Titulní obrázek** — zobrazí se na kartě novinky na úvodní stránce a v záhlaví detailu novinky. Obrázek se ořízne na široký formát 7 : 2 (střed zůstává), hlavní motiv proto umísti doprostřed; výřez lze doladit přímo v editoru po nahrání. Podporované formáty JPG, PNG nebo WebP, max. 8 MB. Bez nahraného obrázku se zobrazí výchozí zástupný obrázek.
+3. Nahraj **Titulní obrázek** — na kartě novinky na úvodní stránce se zobrazí ve formátu 4 : 3, v záhlaví detailu novinky jako široký pruh 7 : 2. Oba výřezy se berou ze středu obrázku, nejlépe proto nahraj neořezanou fotku s hlavním motivem uprostřed. Podporované formáty JPG, PNG nebo WebP, max. 8 MB. Bez nahraného obrázku se zobrazí výchozí zástupný obrázek.
 4. Přepínačem **Interní novinka** urči viditelnost:
    - zapnuto → novinka je vidět jen přihlášeným uživatelům v administraci,
    - vypnuto → novinka je veřejná a objeví se i na úvodní stránce webu.
@@ -16,6 +16,14 @@ Redaktor spravuje **novinky** v administraci — krátké aktuální zprávy, kt
 6. **Formát** obsahu je aktuálně vždy Markdown.
 
 ![Vytvoření novinky](./img/novinky-vytvorit.png)
+
+## Vyhledávače a sociální sítě
+
+V sekci **Vyhledávače a sociální sítě** lze nepovinně vyplnit **Titulek pro vyhledávače** a **Popis pro vyhledávače**. Prázdný titulek převezme název novinky, prázdný popis editorial nebo začátek textu. Jako obrázek v náhledu odkazu se použije titulní obrázek novinky.
+
+:::info{title="Adresa novinky"}
+Adresa novinky má nově tvar `/novinka/{id}-{slug}` (např. `/novinka/42-jarni-zavody`), kde slug vychází z nadpisu. Staré odkazy ve tvaru `/novinka/{id}` se automaticky trvale přesměrují (301) na novou adresu, takže dříve sdílené odkazy dál fungují.
+:::
 
 :::info{title="Starší novinky bez obrázku"}
 U novinek přenesených ze starého webu (před rokem 2022) odkazoval obrázek na soubor, který se při migraci nedochoval — appka takový odkaz nově ignoruje a zobrazí zástupný obrázek. Chceš-li u takové novinky obrázek zobrazit, nahraj nový přes pole **Titulní obrázek**.
@@ -32,6 +40,8 @@ U existující novinky lze z nabídky akcí (ikona tří teček) spustit **Posla
 ## Vytvoření novinky přes API
 
 Novinky lze zakládat a upravovat i strojově přes veřejné [API](/api) — endpointy `POST /api/v1/post` a `PUT /api/v1/post/{post}`. Požadavek se autentizuje hlavičkou `x-apikey` (viz [API klíč](/napoveda/stranka-uzivatelska-nastaveni#api-klíč-nově-od-verze-12)). Přístup mají role **Redaktor**, **Administrátor** a **Správce závodů**.
+
+U stránek (`/api/v1/page`) pole `meta` nově obsahuje jen SEO titulek a popis (`title`, `description`); klíče jako `keywords` zmizely.
 
 :::info{title="Kdo má přístup"}
 Zakládat a upravovat novinky může role **Redaktor** (případně Super Administrátor). Viz [Role v aplikaci](/napoveda/role-v-aplikaci).

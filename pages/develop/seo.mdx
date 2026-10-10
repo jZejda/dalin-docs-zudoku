@@ -1,0 +1,44 @@
+# SEO veřejného webu
+
+Veřejný web používá balíček [`ralphjsmit/laravel-seo`](https://github.com/ralphjsmit/laravel-seo) (a jeho Filament formulářové pole pro administraci). Metadata se skládají ve službách v `App\Services\Seo`, které vrací `SEOData` pro jednotlivé typy stránek.
+
+## Služby
+
+| Služba | Účel |
+|---|---|
+| `SiteSeo` | Výchozí metadata webu z Nastavení klubu, JSON-LD `SportsOrganization` a `WebSite`, pomocník pro `BreadcrumbList` |
+| `PostSeo` | Novinky: titulek, popis, obrázek, JSON-LD `NewsArticle` a `BreadcrumbList` |
+| `PageSeo` | Statické stránky (`/stranka/{slug}`) |
+| `EventSeo` | Detail akce (`/akce/{id}`): věcný popis (typ · datum · místo · disciplína · pořadatelé), `SportsEvent` jen pro typ `SportEventType::Race` |
+| `EventListSeo` | Startovky a výsledky |
+
+Metadata se vykreslují v partialu `partials/frontend/seo`. Ruční hodnoty jsou uložené v tabulce `seo` (polymorfně k `Post` a `Page`); prázdné se dopočítají (název, editorial nebo začátek textu).
+
+## Routy
+
+- `/robots.txt` — `RobotsTxtController`
+- `/sitemap.xml` — `SitemapController` (route `sitemap`), obsah sestavuje `App\Services\Seo\Sitemap`: titulka, novinky, otevřené stránky a akce za poslední rok. Kešuje se na hodinu a keš se maže při uložení nebo smazání novinky, stránky či akce (hromadné `update()` z ORIS synchronizace čekají na vypršení).
+- `/novinka/{post}` — URL se slugem `{id}-{slug}`, starý tvar `/novinka/{id}` přesměrovává 301
+- Startovky a výsledky vrací `404`, pokud data chybí (dříve prázdná stránka)
+
+## Nastavení klubu
+
+Sekce `form.seo` v `ClubSettings` (`lang/cs/club-settings.php`) ukládá do `AppSetting` (klíče `seo.*`) popis klubu, výchozí obrázek pro sdílení (nahrává se rovnou v 1200 × 630, bez konverze), logo a seznam profilů (`sameAs`). Výchozí obrázek a popis doplňuje `SiteSeo` všem stránkám, které nemají vlastní.
+
+Titulní obrázky novinek mají vlastní Media Library konverzi `og` (ořez 1200 × 630, `PostSeo::IMAGE_CONVERSION`). Pro obrázky nahrané před nasazením je nutné ji vygenerovat: `php artisan media-library:regenerate --only=og`.
+
+## Stránky: migrace z `meta`
+
+Stránky dříve ukládaly SEO do JSON sloupce `pages.meta`, který se nikde nevykresloval. Migrace `move_page_meta_to_seo_table` přenáší `title` a `description` do tabulky `seo`; sloupec `meta` zůstává jako záloha. `keywords` a `og:image` se nepřenášejí.
+
+:::warning{title="Změna kontraktu API a MCP"}
+Pole `meta` u stránek (REST `PageResource`, MCP nástroje `PagesTool` a `GetPageTool`) teď vrací `Page::seoMeta()`, tedy jen `title` a `description` z tabulky `seo`. Klíče `keywords` a další zmizely. Viz [API](/api).
+:::
+
+## Testy
+
+Testy jsou v `tests/Feature/Seo/` (`PublicSiteSeoTest`, `PostSeoTest`, `PageSeoTest`, `EventSeoTest`, `EventListSeoTest`). Spuštění: `make pest` nebo `vendor/bin/sail artisan test tests/Feature/Seo`.
+
+## Lokalizace
+
+Popisky polí balíčku jsou v `lang/vendor/filament-seo/{cs,en}/translations.php`, popisky sekcí v `lang/{cs,en}/content.php` (`post.form.section_seo`, `page.form.section_seo`).
