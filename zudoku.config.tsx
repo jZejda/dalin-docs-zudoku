@@ -441,6 +441,11 @@ const config: ZudokuConfig = {
         },
         {
           type: "doc",
+          file: "develop/mail-layout",
+          label: "E-maily (klubový vzhled)",
+        },
+        {
+          type: "doc",
           file: "develop/marketplace-module",
           label: "Modul Tržiště",
         },

@@ -11,6 +11,18 @@ bankovní údaje, které se zobrazují **členům v pokynech k platbě kreditu**
   `config/site-config.php` na serveru).
 - **Celý název klubu**
 
+## Barvy klubu
+
+Sekce **Barvy klubu** určuje vzhled e-mailů, které aplikace rozesílá členům.
+
+- **Akcentní barva** — barva ve formátu `#rrggbb` (např. `#0a7d3b`). Použije se na pruh v hlavičce e-mailu, hlavní tlačítko a zvýraznění termínů. Pokud pole nevyplníte, použije se výchozí žlutá `#ffd329`.
+
+Barvu textu na tlačítku (tmavá nebo bílá podle jasu barvy) i světlé odstíny pozadí aplikace dopočítá sama.
+
+:::tip{title="Logo a sociální sítě v e-mailech"}
+Logo klubu v hlavičce a odkazy na sociální sítě v patičce se přebírají ze sekce **Veřejný web a sociální sítě** níže. Stačí je vyplnit tam.
+:::
+
 ## Veřejný web a sociální sítě
 
 Sekce **Veřejný web a sociální sítě** obsahuje údaje pro vyhledávače (SEO) a pro náhledy odkazů sdílených na sociálních sítích.
@@ -18,7 +30,7 @@ Sekce **Veřejný web a sociální sítě** obsahuje údaje pro vyhledávače (S
 - **Popis klubu** — jedna až dvě věty o klubu, ideálně do 160 znaků. Zobrazuje se ve výsledcích vyhledávání a v náhledech odkazů u stránek bez vlastního popisu.
 - **Výchozí obrázek pro sdílení** — JPG nebo PNG ve velikosti 1200 × 630 px (např. logo na barvách klubu). Použije se v náhledu odkazu na Facebooku, WhatsAppu apod. u stránek bez vlastního obrázku.
 - **Logo klubu** — čtvercové PNG nebo JPG, alespoň 112 × 112 px. Vyhledávače ho mohou zobrazit u výsledků klubu.
-- **Profily na sociálních sítích** — celé adresy profilů klubu (Facebook, Instagram, Strava…). Každou potvrďte klávesou Enter.
+- **Profily na sociálních sítích** — celé adresy profilů klubu (Facebook, Instagram, Strava…). Každou potvrďte klávesou Enter. Logo a profily se zobrazují i v e-mailech.
 
 :::tip{title="Vyplňte po aktualizaci"}
 Po přechodu na novou verzi tyto údaje vyplňte, jinak budou mít veřejné stránky bez vlastního popisu a obrázku jen obecné náhledy. Podrobnosti k nastavení u novinek a stránek najdete v částech [Novinky](/napoveda/sprava-novinek) a [Statické stránky](/napoveda/sprava-stranek).

@@ -1,0 +1,76 @@
+# E-maily – klubový vzhled
+
+Všechny odchozí e-maily používají jednotný klubový vzhled (logo, akcentní barva, patička). Vzhled je postavený na Laravel mailable s vlastním tématem `club` a sadou Blade komponent `x-mail::club.*`.
+
+## Jak to funguje
+
+- Každý mailable si klubový vzhled zapíná explicitně: `public $theme = 'club';`. Konfigurace `mail.markdown.theme` zůstává `default`.
+- Téma je v `resources/views/vendor/mail/html/themes/club.blade.php`, komponenty v `resources/views/vendor/mail/html/club/`. Textová varianta e-mailu je v `resources/views/vendor/mail/text/club/`.
+- Šablony konkrétních e-mailů jsou v `resources/views/emails/...` a skládají se z komponent.
+- CSS je konzervativní (e-mailové klienty podporují jen malou část moderního CSS), proto se světlé odstíny akcentní barvy předpočítávají v `MailBranding`.
+
+:::warning{title="Soubory ve vendor/"}
+Kvůli pravidlu `vendor/` v `.gitignore` je nutné nové soubory v `resources/views/vendor/mail` přidávat pomocí `git add -f`.
+:::
+
+## Minimální šablona
+
+```blade
+<x-mail::club.message
+    :eyebrow="__('mail/users-in-debit.club.eyebrow')"
+    :title="__('mail/users-in-debit.club.title')"
+    :lead="__('mail/users-in-debit.club.lead', ['date' => $date])"
+>
+<x-mail::club.section :title="__('mail/users-in-debit.club.section')" />
+
+<x-mail::club.person :name="$name" :lines="[['text' => $email]]" :amount="$amount" />
+
+<x-mail::club.fine>{{ __('mail/users-in-debit.club.fine') }}</x-mail::club.fine>
+</x-mail::club.message>
+```
+
+:::danger{title="Prázdné řádky ve slotu"}
+Layout zpracovává slot jako Markdown, takže prázdný řádek uvnitř HTML bloku jej ukončí. Komponenty proto nesmí obsahovat prázdné řádky a HTML z editoru čistí `MailRichContent`.
+:::
+
+## Komponenty
+
+| Komponenta | Účel |
+|---|---|
+| `club.message` | Celý layout: hlavička s logem, `eyebrow`, `title`, `lead`, patička (`settingsUrl` volitelně) |
+| `club.section` | Nadpis sekce (malý popisek) |
+| `club.heading` | Nadpis `h2` uvnitř obsahu |
+| `club.facts` | Mřížka faktů po dvou; položka s `'wide' => true` má vlastní řádek (heslo, URL) |
+| `club.event` | Řádek závodu: datum (`day`, `month`), `name`, `url`, `meta`, `deadline` |
+| `club.person` | Osoba se jménem, detailem, řádky a částkou |
+| `club.balance` | Blok se zůstatkem (`label`, `amount`, `note`) |
+| `club.status` | Stavový pruh, `tone` = `positive` nebo `negative` |
+| `club.note` | Poznámka (`label`, volitelně `quoted`) |
+| `club.pill` | Štítek |
+| `club.actions` | Hlavní tlačítko a volitelný druhý odkaz (`secondaryTone`) |
+| `club.article` | Článek: `title`, `html`, `text`, `separated` |
+| `club.fine` | Drobný text |
+
+Každá komponenta má HTML i textovou variantu.
+
+## Služby
+
+- **`App\Services\Mail\MailBranding`** — identita klubu pro e-maily: název, iniciály, logo, akcentní barva, barva textu na akcentu (kontrast podle WCAG), světlý odstín, odkazy v patičce, sociální sítě (štítek podle domény). Sestavuje se při každém renderu přes `fromSettings()`, takže dlouho běžící queue worker změnu nastavení převezme bez restartu.
+- **`App\Services\Mail\MailMoney`** — formátování částek: `2 000 Kč`, `−320 Kč`, `+2 000 Kč` (cs), `2,000 CZK` (en).
+- **`App\Services\Mail\MailRichContent`** — převod obsahu z editoru (HTML, Markdown, TipTap JSON) na bezpečné HTML a textovou alternativu.
+
+Zdroje nastavení: akcentní barva `AppSetting::getBrandingAccentColor()` (klíč `branding.accent_color`, výchozí `#ffd329`), logo `AppSetting::getSeoLogoPath()`, sociální sítě `AppSetting::getSeoSameAs()`. Uživatelský popis viz [Nastavení klubu](/napoveda/nastaveni-klubu).
+
+## Ikony
+
+Ikony jsou PNG 32×32 v `public/images/mail/icons/`, vygenerované z Lucide SVG (`vendor/technikermathe/blade-lucide-icons`), protože Gmail SVG nezobrazí. URL vrací `MailBranding::iconUrl($name)`.
+
+## Lokalizace
+
+Texty e-mailů jsou v `lang/{cs,en}/mail/<mailable-kebab>.php`, společné řetězce v `mail/common.club_layout.*`. Viz [Lokalizace](/develop/localization).
+
+## Testy
+
+- `tests/Feature/Mail/ClubMailLayoutTest.php` — vykreslení všech e-mailů
+- `tests/Unit/Mail/MailBrandingTest.php` — barvy a štítky sítí
+- `tests/Feature/Filamentphp/ClubSettingsPageTest.php` — nastavení barvy
