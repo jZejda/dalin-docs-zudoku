@@ -55,7 +55,7 @@ Každá komponenta má HTML i textovou variantu.
 
 ## Služby
 
-- **`App\Services\Mail\MailBranding`** — identita klubu pro e-maily: název, iniciály, logo, akcentní barva, barva textu na akcentu (kontrast podle WCAG), světlý odstín, odkazy v patičce, sociální sítě (štítek podle domény). Sestavuje se při každém renderu přes `fromSettings()`, takže dlouho běžící queue worker změnu nastavení převezme bez restartu.
+- **`App\Services\Mail\MailBranding`** — identita klubu pro e-maily: název, iniciály, logo, akcentní barva, barva textu na akcentu (kontrast podle WCAG), světlý odstín, odkazy v patičce, sociální sítě (štítek podle domény). Sestavuje se při každém renderu přes `fromSettings()`, takže dlouho běžící queue worker změnu nastavení převezme bez restartu. Statická `MailBranding::subject($text)` skládá předmět každého e-mailu jako „ABM – …“ ze zkratky klubu (`site-config.club.abbr`, jinak `APP_NAME`) — v `envelope()` předmět ručně neskládejte.
 - **`App\Services\Mail\MailMoney`** — formátování částek: `2 000 Kč`, `−320 Kč`, `+2 000 Kč` (cs), `2,000 CZK` (en).
 - **`App\Services\Mail\MailRichContent`** — převod obsahu z editoru (HTML, Markdown, TipTap JSON) na bezpečné HTML a textovou alternativu.
 
