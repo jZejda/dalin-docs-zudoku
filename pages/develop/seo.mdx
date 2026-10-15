@@ -25,6 +25,8 @@ Metadata se vykreslují v partialu `partials/frontend/seo`. Ruční hodnoty jsou
 
 Sekce `form.seo` v `ClubSettings` (`lang/cs/club-settings.php`) ukládá do `AppSetting` (klíče `seo.*`) popis klubu, výchozí obrázek pro sdílení (nahrává se rovnou v 1200 × 630, bez konverze), logo a seznam profilů (`sameAs`). Výchozí obrázek a popis doplňuje `SiteSeo` všem stránkám, které nemají vlastní.
 
+Favicona (`seo.favicon`, ICO nebo PNG do 512 kB, SVG se nepřijímá) se ukládá na disk `public` do adresáře `seo/`. URL vrací `AppSetting::getFaviconUrl()`, bez nahraného souboru je to sdílený `public/favicon.ico`. Do hlaviček se vkládá přes `partials/favicon.blade.php` (layouty `app`, `guest`, `terrain` a `components/layouts/app`), v administraci přes `->favicon()` v `AdminPanelProvider`. Při výměně se starý soubor maže (`ClubSettings::saveSeoUpload()`). Testy jsou v `ClubSettingsPageTest` a `PublicSiteSeoTest`.
+
 Titulní obrázky novinek mají vlastní Media Library konverzi `og` (ořez 1200 × 630, `PostSeo::IMAGE_CONVERSION`). Pro obrázky nahrané před nasazením je nutné ji vygenerovat: `php artisan media-library:regenerate --only=og`.
 
 ## Stránky: migrace z `meta`

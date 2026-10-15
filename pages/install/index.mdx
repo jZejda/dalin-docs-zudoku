@@ -35,7 +35,11 @@ Při přechodu na verzi se SEO veřejného webu (`ralphjsmit/laravel-seo`) prove
 
 1. Spusťte migrace: `php artisan migrate` (přenese titulek a popis stránek z původního sloupce `meta` do tabulky `seo`).
 2. Přegenerujte obrázky pro sdílení: `php artisan media-library:regenerate --only=og`.
-3. V administraci otevřete **Nastavení → Nastavení klubu** a vyplňte sekci **Veřejný web a sociální sítě** (popis klubu, obrázek pro sdílení 1200 × 630 px, logo, profily). Nutné zejména na instancích abm a pbm. Viz [Nastavení klubu](/napoveda/nastaveni-klubu).
+3. V administraci otevřete **Nastavení → Nastavení klubu** a vyplňte sekci **Veřejný web a sociální sítě** (popis klubu, obrázek pro sdílení 1200 × 630 px, logo, favicona, profily). Nutné zejména na instancích abm a pbm. Viz [Nastavení klubu](/napoveda/nastaveni-klubu).
 
 Technický popis najdete v [dokumentaci SEO](/develop/seo).
+
+:::warning{title="Host v APP_URL musí odpovídat adrese, na které se web otevírá"}
+Hodnota `APP_URL` (včetně `www` nebo bez něj) musí souhlasit s adresou v prohlížeči. Jinak mají odkazy na nahrané soubory jiný původ (origin) a náhledy obrázků v nahrávacím poli (FilePond) selžou kvůli CORS. `public/.htaccess` proto přesměrovává `www.<doména>` trvale (301) na doménu bez `www`. `APP_URL` tedy nastavujte vždy bez `www`.
+:::
 
